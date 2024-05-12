@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import routes from 'routes.js';
+import routes from './routes.js';
 
 const app = routes();
 const dbClient = new MongoClient('mongodb://localhost:27017');

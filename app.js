@@ -1,7 +1,7 @@
-import express from 'express';
 import { MongoClient } from 'mongodb';
+import routes from 'routes.js';
 
-const app = express();
+const app = routes();
 const dbClient = new MongoClient('mongodb://localhost:27017');
 
 async function main() {

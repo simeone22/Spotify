@@ -7,7 +7,7 @@ const dbClient = new MongoClient('mongodb://localhost:27017');
 async function main() {
     await dbClient.connect();
     console.log('connected to Mongo succesfully!');
-    const db = client.db('spotify');
+    const db = dbClient.db('spotify');
     app.listen(80);
     //inizio codice
 }

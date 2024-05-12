@@ -1,0 +1,25 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Playlist</title>
+        <script src="/js/common.js"></script>
+        <script>
+            async function getData() {
+                const params = getParameters();
+                const res = await fetch(
+                    `/api/get-playlist-data?playlistId=${params["id"]}`
+                );
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const data = await res.json();
+                console.log(data);
+                //TODO: Use data
+            }
+            getData();
+        </script>
+    </head>
+    <body></body>
+</html>

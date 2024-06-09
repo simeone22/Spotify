@@ -22,7 +22,29 @@ export default function routes(db) {
             return;
         }
 
+        const songsPlaylists = db.collection("SongsPlaylists");
+
+        playlist.songs = await songsPlaylists.find({ PlaylistID: req.query.playlistId }).toArray();
+
         res.json(playlist).status(200).send();
+    });
+
+    app.get("/api/get-song-data", async (req, res) => {
+        if (req.query.songId === undefined) {
+            res.status(400).send();
+            return;
+        }
+
+        const songs = db.collection("Songs");
+
+        const song = await songs.findOne({ _id: new ObjectId(req.query.songId) });
+
+        if(song === null){
+            res.status(404).send();
+            return;
+        }
+
+        res.json(song).status(200).send();
     });
 
     app.get("/*", (req, res) => {

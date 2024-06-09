@@ -1,5 +1,6 @@
 import express from "express";
 import fs from "fs";
+import { ObjectId } from "mongodb";
 
 export default function routes(db) {
     const app = express();
@@ -14,7 +15,7 @@ export default function routes(db) {
 
         const playlists = db.collection("Playlists");
 
-        const playlist = await playlists.findOne({ _id: req.query.playlistId });
+        const playlist = await playlists.findOne({ _id: new ObjectId(req.query.playlistId) });
 
         if(playlist === null){
             res.status(404).send();

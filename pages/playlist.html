@@ -3,12 +3,14 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Playlist</title>
+        <link rel="stylesheet" href="style/common.css" />
+        <link rel="stylesheet" href="style/playlist.css" />
         <script src="/js/jquery-3.7.1.slim.min.js"></script>
         <script src="/js/common.js"></script>
         <script>
             async function getData() {
                 const params = getParameters();
-                const res = await fetch(
+                let res = await fetch(
                     `/api/get-playlist-data?playlistId=${params["id"]}`
                 );
                 if (res.status === 404) {
@@ -16,17 +18,54 @@
                     return;
                 }
                 const data = await res.json();
+                
                 console.log(data);
 
+                document.documentElement.style.setProperty(
+                    "--playlist-bg-img",
+                    `url(/media/images/playlists/${data._id}.png)`
+                );
+                if(data.IsPublic === true){
+                    $("#IsPublic").text("Public playlist");
+                }else{
+                    $("#IsPublic").text("Private playlist");
+                }
+                
                 $("#Name").text(data.Name);
                 $("#Image").attr(
                     "src",
                     `/media/images/playlists/${data._id}.png`
                 );
+
+                /*res = await fetch(
+                    `/api/get-user-data?userId=${data.UserID}`
+                );
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const userInfo = await res.json();
+
+                $("#userInfo img").attr(
+                    "src",
+                    `/media/images/users/${data.UserID}.png`
+                );
+                
+                $("#Publisher").attr(
+                    "href", 
+                    `/user?id=${data.UserID}`
+                );
+
+                $("#Publisher").text(userInfo.Username);*/
+
+                $("#SongsNumber").text(data.SongNumber)
                 $("#Duration").text(getDuration(data.TotalDuration));
 
-                data.songs.forEach(async (song) => {
-                    const res = await fetch(
+                let songsCards = [];
+                let shown = 0;
+
+                data.songs.forEach(async (song, key, orig) => {
+                    let res = await fetch(
                         `/api/get-song-data?songId=${song.SongID}`
                     );
                     if (res.status === 404) {
@@ -34,8 +73,59 @@
                         return;
                     }
                     const data = await res.json();
-                    $("#songsContainer").append(songCard(data._id, data.Name, data.Duration));
+
+                    res = await fetch(
+                        `/api/get-playlist-data?playlistId=${data.AlbumID}`
+                    );
+
+                    if (res.status === 404) {
+                        //TODO: error
+                        return;
+                    }
+                    const AlbumInfo = await res.json();
+                    let card = songCard(
+                        key + 1,
+                        data._id,
+                        data.Name,
+                        AlbumInfo.Name,
+                        data.AlbumID,
+                        data.PublicationDate,
+                        data.Duration
+                    );
+
+                    $("#songsContainer").append(card);
+
+                    //TODO: Generazione ordinata
+                    /*if(key === shown) {
+                        $("#songsContainer").append(card);
+                        shown++;
+                        songsCards.every(card => {
+                            if(shown === card.id){
+                                $("#songsContainer").append(songsCards.shift());
+                                shown++;
+                                return true;
+                            }
+                            return false;
+                        })
+                    }
+                    else {
+                        songsCards.push({id: key, value: card});
+                        songsCards = songsCards.sort((a, b) => b.id - a.id);
+                    }
+                    if(orig.length === key + 1){
+                        while(songsCards.length !== 0){
+                            songsCards.every(card => {
+                                if(shown === card.id){
+                                    $("#songsContainer").append(songsCards.shift());
+                                    shown++;
+                                    return true;
+                                }
+                                return false;
+                            });
+                        }
+                    }*/
                 });
+                
 
                 //TODO: Use data
             }
@@ -43,9 +133,43 @@
         </script>
     </head>
     <body>
-        <img id="Image" />
-        <h1 id="Name"></h1>
-        <span id="Duration"></span>
-        <div id="songsContainer"></div>
+        <div class="background"></div>
+        <div id="playlistContainer">
+            <div class="playlistView">
+                <img id="Image" />
+                <div id="playlistInfo">
+                    <span id="IsPublic"></span>
+                    <span id="Name"></span>
+                    <div>
+                        <div id="userInfo">
+                            <img/>
+                            <a id="Publisher"></a>
+                        </div>
+                        •
+                        <span id="SongsNumber"></span> songs,
+                        <span id="Duration"></span>
+                    </div>
+                </div>
+                <div id="songsContainer">
+                    <div class="header"><div class="orderId">#</div><div class="title">Title</div><div class="album">Album</div><div class="publicationDate">Publication date</div><div class="duration"><svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
     </body>
 </html>

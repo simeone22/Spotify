@@ -26,7 +26,7 @@ export default function routes(db) {
 
         playlist.songs = await songsPlaylists.find({ PlaylistID: req.query.playlistId }).toArray();
 
-        res.json(playlist).status(200).send();
+        res.status(200).json(playlist);
     });
 
     app.get("/api/get-song-data", async (req, res) => {
@@ -44,7 +44,25 @@ export default function routes(db) {
             return;
         }
 
-        res.json(song).status(200).send();
+        const songsPlaylists = db.collection("SongsPlaylists");
+
+        song.AlbumID = (await songsPlaylists.find({ SongID: req.query.songId }).sort( { AdditionDate: 1 } ).limit(1).toArray())[0].PlaylistID;
+
+        res.status(200).json(song);
+    });
+
+
+    app.get("/api/get-user-data", async (req, res) => {
+        if (req.query.userId === undefined) {
+            res.status(400).send();
+            return;
+        }
+
+        const users = db.collection("Users");
+
+        const user = await users.findOne({ _id: new ObjectId(req.query.userId) });
+
+        res.status(200).json(user);
     });
 
     app.get("/*", (req, res) => {

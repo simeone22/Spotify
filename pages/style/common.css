@@ -1,0 +1,142 @@
+body {
+    background-color: black;
+    color: white;
+    margin: 0;
+}
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.size-6 {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+img {
+    border-radius: 2.5%;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.songContainer:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.songContainer:hover * {
+    color: white;
+}
+
+.songContainer:hover .playButton ~ span {
+    display: none;
+}
+
+.songContainer:hover .playButton {
+    display: block;
+}
+
+.songContainer .playButton * {
+    margin: 0;
+}
+
+.songContainer .playButton:hover {
+    cursor: pointer;
+}
+
+.songContainer .playButton {
+    display: none;
+    border: none;
+    background: none;
+    float: left;
+    margin: 0;
+}
+
+.songContainer {
+    width: 100%;
+    margin: 10 auto;
+}
+
+.songContainer * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: rgb(200, 200, 200);
+    font-weight: 600;
+}
+
+.songContainer img {
+    width: 8%;
+}
+
+.songContainer .title {
+    color: white;
+}
+
+#songsContainer {
+    width: 100%;
+    margin: 10 auto;
+}
+
+#songsContainer .header {
+    width: 100%;
+    margin: 0 auto;
+}
+#songsContainer .header * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#songsContainer .orderId {
+    width: 1%;
+}
+
+#songsContainer .title {
+    width: 32%;
+}
+
+#songsContainer .album {
+    width: 26%;
+}
+
+#songsContainer .publicationDate {
+    width: 26%;
+}
+
+#songsContainer .duration {
+    width: 3%;
+}
+
+#songsContainer .duration * {
+    margin: 0;
+}
+
+.songContainer.selected {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.songContainer.selected * {
+    color: white;
+}
+
+.songContainer.selected .playButton {
+    display: block;
+}
+
+.songContainer.selected .playButton ~ span {
+    display: none;
+}
+
+.songContainer.playing * {
+    color: #1ed861;
+}

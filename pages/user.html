@@ -1,0 +1,68 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User</title>
+        <link rel="stylesheet" href="style/common.css" />
+        <link rel="stylesheet" href="style/playlist.css" />
+        <script src="/js/jquery-3.7.1.slim.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script>
+            async function getData() {
+                const params = getParameters();
+                let res = await fetch(
+                    `/api/get-user-data?userId=${params["id"]}`
+                );
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const data = await res.json();
+
+                $("#Image").attr("src", `/media/images/users/${data._id}.png`);
+
+                $("#Name").text(data.Name);
+            }
+            getData();
+        </script>
+    </head>
+    <body>
+        <div class="background"></div>
+        <div id="playlistContainer">
+            <div class="playlistView">
+                <img id="Image" />
+                <div id="playlistInfo">
+                    <span id="Name"></span>
+                    <div>
+                        <span id="SongsNumber"></span>
+                    </div>
+                </div>
+                <div id="songsContainer">
+                    <div class="header">
+                        <div class="orderId">#</div>
+                        <div class="title">Title</div>
+                        <div class="album">Album</div>
+                        <div class="publicationDate">Publication date</div>
+                        <div class="duration">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -51,3 +51,8 @@ function songCard(id, name, duration) {
     element.appendChild(el);
     return element;
 }
+
+function songPlayer(){
+    let element = document.createElement("div");
+    element.classList.add("songPlayer");
+}

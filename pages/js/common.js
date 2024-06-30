@@ -1,3 +1,8 @@
+const playControllerIcon =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" /></svg>';
+const pauseControllerIcon =
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>';
+
 const playIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" /></svg>';
 const pauseIcon =
@@ -38,11 +43,12 @@ function getAudioPlayer() {
         data = JSON.parse(data);
         audioPlayer.src = data.src;
         audioPlayer.currentTime = data.currentTime;
-        audioPlayer.paused  = data.paused;
         audioPlayer.loop = data.loop;
         audioPlayer.volume = data.volume;
+        if (!data.paused) {
+            audioPlayer.play();
+        }
     }
-
     return audioPlayer;
 }
 
@@ -118,10 +124,18 @@ function songCard(
     let btn = document.createElement("button");
     btn.innerHTML = playIcon;
     btn.className = "playButton";
-    
+
     if (audioPlayer.src.endsWith(source)) {
         element.classList.add("playing");
     }
+
+    audioPlayer.addEventListener("play", () => {
+        btn.innerHTML = pauseIcon;
+    });
+
+    audioPlayer.addEventListener("pause", () => {
+        btn.innerHTML = playIcon;
+    });
 
     btn.onclick = () => {
         console.log(audioPlayer.src);

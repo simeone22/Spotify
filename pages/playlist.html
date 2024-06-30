@@ -5,9 +5,11 @@
         <title>Playlist</title>
         <link rel="stylesheet" href="style/common.css" />
         <link rel="stylesheet" href="style/playlist.css" />
+        <link rel="manifest" href="manifest.json">
         <script src="/js/jquery-3.7.1.slim.min.js"></script>
         <script src="/js/common.js"></script>
         <script>
+            let songs;
             async function getData() {
                 const params = getParameters();
                 let res = await fetch(
@@ -18,6 +20,8 @@
                     return;
                 }
                 const data = await res.json();
+
+                songs = data.songs;
                 
                 console.log(data);
 
@@ -37,7 +41,7 @@
                     `/media/images/playlists/${data._id}.png`
                 );
 
-                /*res = await fetch(
+                res = await fetch(
                     `/api/get-user-data?userId=${data.UserID}`
                 );
                 if (res.status === 404) {
@@ -56,7 +60,7 @@
                     `/user?id=${data.UserID}`
                 );
 
-                $("#Publisher").text(userInfo.Username);*/
+                $("#Publisher").text(userInfo.Name);
 
                 $("#SongsNumber").text(data.SongNumber)
                 $("#Duration").text(getDuration(data.TotalDuration));
@@ -125,9 +129,40 @@
                         }
                     }*/
                 });
-                
-
                 //TODO: Use data
+                document.querySelectorAll(".playButtonController").forEach((playButton) => {
+                    playButton.addEventListener("click", playPlaylist);
+                    if (songs.some((song) => audioPlayer.src.endsWith(`/media/audio/songs/${song.SongID}.mp3`))) {
+                        if (audioPlayer.paused) {
+                            playButton.innerHTML = playControllerIcon;
+                        } else {
+                            playButton.innerHTML = pauseControllerIcon;
+                        }
+                    }
+                    audioPlayer.addEventListener("pause", (e) => {
+                        playButton.innerHTML = playControllerIcon;
+                    });
+                    audioPlayer.addEventListener("play", (e) => {
+                        playButton.innerHTML = pauseControllerIcon;
+                    });
+                });
+            }
+            function playPlaylist(ev) {
+                const song = songs.find(song => audioPlayer.src.endsWith(`/media/audio/songs/${song.SongID}.mp3`));
+                const btn = ev.target.closest("button");
+                if (song !== undefined) {
+                    if (!audioPlayer.paused) {
+                        btn.innerHTML = playControllerIcon;
+                        audioPlayer.pause();
+                    } else {
+                        btn.innerHTML = pauseControllerIcon;
+                        audioPlayer.play();
+                    }
+                } else {
+                    btn.innerHTML = pauseControllerIcon;
+                    audioPlayer.src = `/media/audio/songs/${songs[0].SongID}.mp3`;
+                    audioPlayer.play();
+                }
             }
             getData();
         </script>
@@ -151,6 +186,10 @@
                     </div>
                 </div>
                 <div id="songsContainer">
+                    <div id="playlistController">
+                        <button class="playButtonController">
+                        </button>
+                    </div>
                     <div class="header"><div class="orderId">#</div><div class="title">Title</div><div class="album">Album</div><div class="publicationDate">Publication date</div><div class="duration"><svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"

@@ -140,3 +140,14 @@ a:hover {
 .songContainer.playing * {
     color: #1ed861;
 }
+
+.playButtonController{
+    color: black;
+    background-color: #1ed861;
+    border-radius: 50%;
+    cursor: pointer;
+    aspect-ratio: 1;
+    border: none;
+    height: 6%;
+    margin: 0;
+}

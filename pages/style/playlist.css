@@ -64,3 +64,22 @@
     font-weight: 700;
     display: block;
 }
+
+#userInfo img {
+    border-radius: 50%;
+    height: 2%;
+    aspect-ratio: 1;
+    vertical-align: middle;
+}
+
+#Publisher {
+    font-weight: 700;
+}
+
+#userInfo {
+    display: inline-block;
+}
+
+#playlistController {
+    margin: 1% 0 1% 0;
+}

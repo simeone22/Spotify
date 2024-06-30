@@ -6,6 +6,10 @@ export default function routes(db) {
     const app = express();
 
     //! Scrivi qui dentro tutti gli route possibili per express (Esempio: app.get('/home', (req, res) => {console.log('Sono bello!')});)
+    app.use(function (req, res, next) {
+        res.setHeader("Permissions-Policy", "autoplay=(self)");
+        next();
+    });
 
     app.get("/api/get-playlist-data", async (req, res) => {
         if (req.query.playlistId === undefined) {
@@ -15,16 +19,20 @@ export default function routes(db) {
 
         const playlists = db.collection("Playlists");
 
-        const playlist = await playlists.findOne({ _id: new ObjectId(req.query.playlistId) });
+        const playlist = await playlists.findOne({
+            _id: new ObjectId(req.query.playlistId),
+        });
 
-        if(playlist === null){
+        if (playlist === null) {
             res.status(404).send();
             return;
         }
 
         const songsPlaylists = db.collection("SongsPlaylists");
 
-        playlist.songs = await songsPlaylists.find({ PlaylistID: req.query.playlistId }).toArray();
+        playlist.songs = await songsPlaylists
+            .find({ PlaylistID: req.query.playlistId })
+            .toArray();
 
         res.status(200).json(playlist);
     });
@@ -37,20 +45,27 @@ export default function routes(db) {
 
         const songs = db.collection("Songs");
 
-        const song = await songs.findOne({ _id: new ObjectId(req.query.songId) });
+        const song = await songs.findOne({
+            _id: new ObjectId(req.query.songId),
+        });
 
-        if(song === null){
+        if (song === null) {
             res.status(404).send();
             return;
         }
 
         const songsPlaylists = db.collection("SongsPlaylists");
 
-        song.AlbumID = (await songsPlaylists.find({ SongID: req.query.songId }).sort( { AdditionDate: 1 } ).limit(1).toArray())[0].PlaylistID;
+        song.AlbumID = (
+            await songsPlaylists
+                .find({ SongID: req.query.songId })
+                .sort({ AdditionDate: 1 })
+                .limit(1)
+                .toArray()
+        )[0].PlaylistID;
 
         res.status(200).json(song);
     });
-
 
     app.get("/api/get-user-data", async (req, res) => {
         if (req.query.userId === undefined) {
@@ -60,7 +75,9 @@ export default function routes(db) {
 
         const users = db.collection("Users");
 
-        const user = await users.findOne({ _id: new ObjectId(req.query.userId) });
+        const user = await users.findOne({
+            _id: new ObjectId(req.query.userId),
+        });
 
         res.status(200).json(user);
     });

@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>User</title>
         <link rel="stylesheet" href="style/common.css" />
-        <link rel="stylesheet" href="style/playlist.css" />
+        <link rel="stylesheet" href="style/user.css" />
         <script src="/js/jquery-3.7.1.slim.min.js"></script>
         <script src="/js/common.js"></script>
         <script>
@@ -19,9 +19,30 @@
                 }
                 const data = await res.json();
 
+                document.documentElement.style.setProperty(
+                    "--playlist-bg-img",
+                    `url(/media/images/users/${data._id}.png)`
+                );
+
+                if(data.IsPublisher){
+                    $("#Image").addClass("publisher");
+                }
+
                 $("#Image").attr("src", `/media/images/users/${data._id}.png`);
 
                 $("#Name").text(data.Name);
+
+                const publicPlaylists = data.playlists.filter(p => p.IsPublic);
+
+                $("#PlaylitsNumber").text(publicPlaylists.length);
+
+                publicPlaylists.forEach(playlist => {
+                    const square = squaredPlaylist(playlist._id, playlist.Name);
+
+                    $("#publicPlaylistsContainer").append(square);
+                });
+
+                document.body.appendChild(audioController());
             }
             getData();
         </script>
@@ -34,33 +55,12 @@
                 <div id="playlistInfo">
                     <span id="Name"></span>
                     <div>
-                        <span id="SongsNumber"></span>
+                        <span id="PlaylitsNumber"></span> public playlists
                     </div>
                 </div>
-                <div id="songsContainer">
-                    <div class="header">
-                        <div class="orderId">#</div>
-                        <div class="title">Title</div>
-                        <div class="album">Album</div>
-                        <div class="publicationDate">Publication date</div>
-                        <div class="duration">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="size-6"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                    <hr />
+                <div id="publicPlaylistsContainer">
+                    <h1>Public playlists</h1>
+                    <!-- TODO: squared playlists container -->
                 </div>
             </div>
         </div>

@@ -64,6 +64,12 @@ export default function routes(db) {
                 .toArray()
         )[0].PlaylistID;
 
+        const songPublishers = db.collection("SongPublishers");
+
+        song.publishers = await songPublishers
+            .find({ SongID: req.query.songId })
+            .toArray();
+
         res.status(200).json(song);
     });
 
@@ -78,6 +84,12 @@ export default function routes(db) {
         const user = await users.findOne({
             _id: new ObjectId(req.query.userId),
         });
+
+        const playlists = db.collection("Playlists");
+
+        user.playlists = await playlists
+            .find({ UserID: req.query.userId })
+            .toArray();
 
         res.status(200).json(user);
     });

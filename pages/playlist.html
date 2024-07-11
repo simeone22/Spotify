@@ -164,6 +164,8 @@
                             playButton.innerHTML = pauseControllerIcon;
                         });
                     });
+                const playlistCont = document.querySelector("#playlistContainer")
+                playlistCont.insertBefore(Navbar(), playlistCont.childNodes[0]);
                 document.body.appendChild(audioController());
             }
             function playPlaylist() {

@@ -155,7 +155,10 @@ function songCard(
     el.className = "orderId";
 
     let btn = document.createElement("button");
-    btn.innerHTML = (audioPlayer.src.endsWith(source) && !audioPlayer.paused) ? pauseIcon : playIcon;
+    btn.innerHTML =
+        audioPlayer.src.endsWith(source) && !audioPlayer.paused
+            ? pauseIcon
+            : playIcon;
     btn.className = "playButton";
 
     if (audioPlayer.src.endsWith(source)) {
@@ -167,12 +170,12 @@ function songCard(
     });
 
     audioPlayer.addEventListener("play", () => {
-        if(!audioPlayer.src.endsWith(source)) return;
+        if (!audioPlayer.src.endsWith(source)) return;
         btn.innerHTML = pauseIcon;
     });
 
     audioPlayer.addEventListener("pause", () => {
-        if(!audioPlayer.src.endsWith(source)) return;
+        if (!audioPlayer.src.endsWith(source)) return;
         btn.innerHTML = playIcon;
     });
 
@@ -387,9 +390,19 @@ function audioController() {
     btn = document.createElement("button");
     btn.innerHTML = prevIcon;
     btn.className = "moveSong";
+    btn.addEventListener("click", (e) => {
+        if (audioPlayer.onended) {
+            audioPlayer.onended();
+        } else {
+            audioPlayer.currentTime = audioPlayer.duration;
+            audioPlayer.src = "";
+        }
+    });
     controlsButtons.appendChild(btn);
     const playbtn = document.createElement("button");
-    playbtn.innerHTML = audioPlayer.paused ? playControllerIconWS : pauseControllerIconWS;
+    playbtn.innerHTML = audioPlayer.paused
+        ? playControllerIconWS
+        : pauseControllerIconWS;
     playbtn.addEventListener("click", () => {
         if (audioPlayer.paused) audioPlayer.play();
         else audioPlayer.pause();
@@ -406,12 +419,19 @@ function audioController() {
     btn.innerHTML = nextIcon;
     btn.className = "moveSong";
     btn.addEventListener("click", (e) => {
-        if (audioPlayer.onended) {
-            audioPlayer.onended();
-        } else {
-            audioPlayer.currentTime = audioPlayer.duration;
+        ù;
+        let data = localStorage.getItem("tracks");
+        if (data === null) {
             audioPlayer.src = "";
+            return;
         }
+        const tracks = JSON.parse(data);
+        let cIdx = tracks.findIndex((el) =>el.SongID === audioPlayer.src.split("/").pop().split(".mp3")[0]);
+        if (cIdx === 0) {
+            cIdx = tracks.length;
+        } 
+        audioPlayer.src = tracks[cIdx].SongID;
+        audioPlayer.play();
     });
     controlsButtons.appendChild(btn);
     div.appendChild(controlsButtons);

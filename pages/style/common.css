@@ -121,7 +121,7 @@ a:hover {
     margin-left: -10px;
     padding-left: 10px;
     padding-top: 10px;
-    backdrop-filter: blur(100000px);
+    backdrop-filter: blur(1000px);
     flex-grow: 1;
 }
 

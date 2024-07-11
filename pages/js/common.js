@@ -7,10 +7,6 @@ const playControllerIconWS =
 const pauseControllerIconWS =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>';
 
-const playIcon =
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" /></svg>';
-const pauseIcon =
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>';
 const nextIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16" stroke-width="1.5" class="size-8"><path stroke-linecap="round" transform="translate(0, -4.5)" stroke-linejoin="round" d="M21 7.5M13 7.5V18M3 16.811V8.69c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811Z" /></svg>';
 const prevIcon =
@@ -163,8 +159,8 @@ function songCard(
     let btn = document.createElement("button");
     btn.innerHTML =
         audioPlayer.src.endsWith(source) && !audioPlayer.paused
-            ? pauseIcon
-            : playIcon;
+            ? pauseControllerIcon
+            : playControllerIcon;
     btn.className = "playButton";
 
     if (audioPlayer.src.endsWith(source)) {
@@ -172,38 +168,38 @@ function songCard(
     }
 
     audioPlayer.addEventListener("change", () => {
-        btn.innerHTML = playIcon;
+        btn.innerHTML = playControllerIcon;
     });
 
     audioPlayer.addEventListener("play", () => {
         if (!audioPlayer.src.endsWith(source)) return;
-        btn.innerHTML = pauseIcon;
+        btn.innerHTML = pauseControllerIcon;
     });
 
     audioPlayer.addEventListener("pause", () => {
         if (!audioPlayer.src.endsWith(source)) return;
-        btn.innerHTML = playIcon;
+        btn.innerHTML = playControllerIcon;
     });
 
     btn.onclick = () => {
         let oldPlaying = document.querySelector(".playing");
         if (oldPlaying !== null) {
-            oldPlaying.querySelector(".playButton").innerHTML = playIcon;
+            oldPlaying.querySelector(".playButton").innerHTML = playControllerIcon;
             oldPlaying.classList.remove("playing");
         }
         element.classList.add("playing");
 
         if (audioPlayer.src.endsWith(source)) {
             if (!audioPlayer.paused) {
-                btn.innerHTML = playIcon;
+                btn.innerHTML = playControllerIcon;
                 audioPlayer.pause();
             } else {
-                btn.innerHTML = pauseIcon;
+                btn.innerHTML = pauseControllerIcon;
                 audioPlayer.play();
             }
         } else {
             console.log("new play");
-            //btn.innerHTML = pauseIcon;
+            //btn.innerHTML = pauseControllerIcon;
             audioPlayer.src = source;
             //audioPlayer.play();
             playPlaylist();

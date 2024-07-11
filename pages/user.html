@@ -24,7 +24,7 @@
                     `url(/media/images/users/${data._id}.png)`
                 );
 
-                if(data.IsPublisher){
+                if (data.IsPublisher) {
                     $("#Image").addClass("publisher");
                 }
 
@@ -32,11 +32,13 @@
 
                 $("#Name").text(data.Name);
 
-                const publicPlaylists = data.playlists.filter(p => p.IsPublic);
+                const publicPlaylists = data.playlists.filter(
+                    (p) => p.IsPublic
+                );
 
                 $("#PlaylitsNumber").text(publicPlaylists.length);
 
-                publicPlaylists.forEach(playlist => {
+                publicPlaylists.forEach((playlist) => {
                     const square = squaredPlaylist(playlist._id, playlist.Name);
 
                     $("#publicPlaylistsContainer").append(square);
@@ -51,11 +53,13 @@
         <div class="background"></div>
         <div id="playlistContainer">
             <div class="playlistView">
-                <img id="Image" />
-                <div id="playlistInfo">
-                    <span id="Name"></span>
-                    <div>
-                        <span id="PlaylitsNumber"></span> public playlists
+                <div>
+                    <img id="Image" />
+                    <div id="playlistInfo">
+                        <span id="Name"></span>
+                        <div>
+                            <span id="PlaylitsNumber"></span> public playlists
+                        </div>
                     </div>
                 </div>
                 <div id="publicPlaylistsContainer">

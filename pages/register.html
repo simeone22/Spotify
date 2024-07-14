@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Register</title>
+
+    <script>
+        function showPsw() {
+            var x = document.getElementById("psw");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1>Registrati</h1>
+    <input type="text" id="name" placeholder="Nome" required><br>
+    <input type="text" id="surname" placeholder="Cognome" required><br>
+    <input type="date" id="dateOfBirth" placeholder="Data di nascita" required><br>
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="psw" placeholder="Password" required>
+    <input type="checkbox" onclick="showPsw()"> Mostra passowrd <br>
+    Sei un creatore? <input type="checkbox" id="areuPublisher"> <br>
+    <button type="button" id="confirmReg">Avanti</button>
+
+</body>
+
+</html>

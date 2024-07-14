@@ -1,0 +1,122 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, rgb(64, 68, 64), rgb(0, 0, 0));
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+
+.div1 {
+    align-items: center;
+    background-color: #121212;
+    padding: 10px;
+    height: fit-content;
+    max-width: 734px;
+    width: 100%;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+    text-align: center;
+    height: 70vh;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#titolo1 {
+    font-size: 40px;
+    font-family: "Archivo Black", sans-serif;
+    color: white;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#logo {
+    margin-top: 25px;
+    height: 50px;
+    width: 50px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid rgb(41, 41, 41); 
+    margin-left: 70px;
+    margin-right: 70px;
+}
+
+p {
+    font-family: "Archivo Black", sans-serif;
+    font-size: .875rem;
+}
+
+.data1 p{
+    margin-top: 40px;
+    margin-bottom: 7px;
+    margin-left: -48px;
+}
+
+.data2 p{
+    margin-top: 40px;
+    margin-bottom: 7px;
+    margin-left: -160px;
+}
+
+#identifier {
+    background-color: rgba(0, 0, 0, 0);
+    padding: 16px 16px;
+    font-size: 1rem;
+}
+
+#identifier:hover {
+    border-color: aliceblue;
+}
+
+#password {
+    background-color: rgba(0, 0, 0, 0);
+    padding: 16px 16px;
+    font-size: 1rem;
+}
+
+#password:hover {
+    border-color: aliceblue;
+}
+
+#login {
+    font-family: "Archivo Black", sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 1rem;
+    padding: 15px 30px;
+    border-radius: 40px;
+    margin-top: 30px;
+    border: 2px solid rgb(30, 165, 17);
+    background-color: #1ed760;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    cursor: pointer;
+    width: 35%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#login:hover {
+    transform: scale(1.05);
+}
+
+.div1 a{
+    color: white;
+    font-family: "Archivo Black", sans-serif;
+    font-size: 1rem;
+    display: inline-block;
+    margin-top: 20px;
+}

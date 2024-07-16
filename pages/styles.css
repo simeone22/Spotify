@@ -5,6 +5,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     height: 100vh;
+    overflow: hidden;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
@@ -20,7 +21,7 @@ body {
     border-radius: 15px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 150px;
+    margin-top: 70px;
     text-align: center;
     height: 70vh;
 }
@@ -51,7 +52,7 @@ body {
 
 hr {
     border: none;
-    border-top: 1px solid rgb(41, 41, 41); 
+    border-top: 1px solid rgb(41, 41, 41);
     margin-left: 70px;
     margin-right: 70px;
 }
@@ -61,16 +62,55 @@ p {
     font-size: .875rem;
 }
 
-.data1 p{
+.data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.data1 p {
     margin-top: 40px;
     margin-bottom: 7px;
     margin-left: -48px;
 }
 
-.data2 p{
+.data1 input {
+    color: white;
+}
+
+.data2 p {
     margin-top: 40px;
     margin-bottom: 7px;
     margin-left: -160px;
+}
+
+.data2 {
+    position: relative;
+    width: fit-content;
+}
+
+.data2 input {
+    padding-right: 40px;
+    box-sizing: border-box;
+    color: white;
+}
+
+#toggle-password {
+    background-color: transparent;
+    position: absolute;
+    right: 0;
+    border: none;
+    cursor: pointer;
+    margin: 0;
+    width: 20%;
+    height: 45%;
+    padding: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.data2 button img {
+    width: 100%;
+    height: 100%;
 }
 
 #identifier {
@@ -93,6 +133,86 @@ p {
     border-color: aliceblue;
 }
 
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+    margin-top: 20px;
+    margin-left: -170px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(82, 82, 82);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 11px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #1ed760;
+}
+
+input:checked+.slider {
+    background-color: #1ed760;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #1ed760;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(21px);
+    -ms-transform: translateX(21px);
+    transform: translateX(21px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.remember-me-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    margin-left: -720px;
+    color: white;
+}
+
+.remember-me-container p {
+    margin-top: 30px;
+    font-size: 10px;
+}
+
 #login {
     font-family: "Archivo Black", sans-serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -113,10 +233,23 @@ p {
     transform: scale(1.05);
 }
 
-.div1 a{
+.div1 a {
     color: white;
     font-family: "Archivo Black", sans-serif;
     font-size: 1rem;
     display: inline-block;
     margin-top: 20px;
+}
+
+.div1 a:hover {
+    color: #1ed760;
+}
+
+#toggle-password:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#toggle-password:hover img {
+    filter: invert(100%) brightness(10000%);
 }

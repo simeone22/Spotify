@@ -260,6 +260,75 @@ a:hover {
     text-overflow: ellipsis;
 }
 
+.userContainer:hover .playButton {
+    display: block;
+}
+
+.userContainer .playButton * {
+    margin: auto;
+}
+
+.userContainer .playButton:hover {
+    cursor: pointer;
+}
+
+.userContainer .playButton {
+    position: absolute;
+    bottom: 14%;
+    right: 9%;
+    display: none;
+    float: left;
+    color: black;
+    background-color: #1ed861;
+    border-radius: 50%;
+    cursor: pointer;
+    aspect-ratio: 1;
+    border: none;
+    height: 20%;
+    margin: 0;
+    margin: 0;
+}
+
+.userContainer {
+    display: block;
+    width: 11%;
+    padding: 5;
+    position: relative;
+    overflow: hidden;
+    text-wrap: nowrap;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 2.5%;
+}
+
+.userContainer:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.userContainer * {
+    display: block;
+    text-decoration: none;
+}
+
+.userContainer img {
+    margin: auto auto;
+    height: 20%;
+    object-fit: cover;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
+
+.userContainer .title {
+    text-decoration: none;
+    width: 100%;
+    max-width: 200px;
+    color: white;
+    overflow: hidden;
+    text-wrap: nowrap;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .audioController {
     position: fixed;
     display: flex;

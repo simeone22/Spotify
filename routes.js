@@ -94,6 +94,74 @@ export default function routes(db) {
         res.status(200).json(user);
     });
 
+    app.get("/api/search-songs", async (req, res) => {
+        if (req.query.song === undefined) {
+            res.status(400).send();
+            return;
+        }
+
+        const songs = db.collection("Songs");
+
+        const songsFound = await songs
+            .find({
+                Name: { $regex: req.query.song, $options: 'i' },
+            })
+            .limit(4)
+            .toArray();
+
+        if (songsFound === null) {
+            res.status(404).send();
+            return;
+        }
+
+        res.status(200).json(songsFound);
+    });
+
+    app.get("/api/search-playlists", async (req, res) => {
+        if (req.query.playlist === undefined) {
+            res.status(400).send();
+            return;
+        }
+
+        const playlists = db.collection("Playlists");
+
+        const playlistsFound = await playlists
+            .find({
+                Name: { $regex: req.query.playlist, $options: 'i' },
+                IsPublic: true,
+            })
+            .toArray();
+
+        if (playlistsFound === null) {
+            res.status(404).send();
+            return;
+        }
+
+        res.status(200).json(playlistsFound);
+    });
+
+    app.get("/api/search-users", async (req, res) => {
+        if (req.query.user === undefined) {
+            res.status(400).send();
+            return;
+        }
+
+        const users = db.collection("Users");
+
+        const usersFound = await users
+            .find({
+                Name: { $regex: req.query.user, $options: 'i' },
+            })
+            .toArray();
+
+        if (usersFound === null) {
+            res.status(404).send();
+            return;
+        }
+
+        res.status(200).json(usersFound);
+    });
+
     app.get("/*", (req, res) => {
         let fPath = `${process.cwd()}/pages/${req.path}`;
         if (!req.path.includes(".")) fPath += ".html";

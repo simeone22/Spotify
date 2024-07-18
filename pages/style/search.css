@@ -1,0 +1,65 @@
+#playlistContainer {
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/opacity/see-through */
+    background: linear-gradient(transparent, black);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.playlistView {
+    margin: 0 0;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    vertical-align: top;
+    flex-grow: 1;
+}
+.playlistView .infoContainer{
+    height: 28%;
+}
+#publicPlaylistsContainer{
+    flex-grow: 1;
+}
+
+.searchInput {
+    width: 20%;
+    height: 5%;
+    position: relative;
+}
+.searchInput input {
+    border: none;
+    background-color: rgb(36, 36, 36);
+    color: white;
+    border-radius: 25px;
+    width: 100%;
+    height: 100%;
+    padding: 5%;
+    padding-left: 10%;
+}
+
+.searchInput input:hover {
+    background-color: rgb(42, 42, 42);
+}
+
+.searchInput .searchIcon{
+    color: rgb(191, 191, 191);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 2.5%;
+}
+
+.searchInput input:hover + .searchIcon {
+    color: white;
+}
+
+.searchInput input:focus + .searchIcon {
+    color: white;
+}

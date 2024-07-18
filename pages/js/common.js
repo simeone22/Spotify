@@ -254,6 +254,105 @@ function songCard(
     return element;
 }
 
+function songCardSmall(
+    id,
+    name,
+    publishers,
+    duration
+) {
+    let element = document.createElement("div");
+    const source = `/media/audio/songs/${id}.mp3`;
+
+    element.className = "songContainer";
+
+    let el = document.createElement("div");
+    el.className = "orderId";
+
+    let img = document.createElement("img");
+    img.src = `/media/images/songs/${id}.png`;
+    el.className = "title";
+    el.appendChild(img);
+
+    let btn = document.createElement("button");
+    btn.innerHTML =
+        audioPlayer.src.endsWith(source) && !audioPlayer.paused
+            ? pauseControllerIcon
+            : playControllerIcon;
+    btn.className = "playButton";
+
+    if (audioPlayer.src.endsWith(source)) {
+        element.classList.add("playing");
+    }
+
+    audioPlayer.addEventListener("change", () => {
+        btn.innerHTML = playControllerIcon;
+    });
+
+    audioPlayer.addEventListener("play", () => {
+        if (!audioPlayer.src.endsWith(source)) return;
+        btn.innerHTML = pauseControllerIcon;
+    });
+
+    audioPlayer.addEventListener("pause", () => {
+        if (!audioPlayer.src.endsWith(source)) return;
+        btn.innerHTML = playControllerIcon;
+    });
+
+    btn.onclick = () => {
+        let oldPlaying = document.querySelector(".playing");
+        if (oldPlaying !== null) {
+            oldPlaying.querySelector(".playButton").innerHTML = playControllerIcon;
+            oldPlaying.classList.remove("playing");
+        }
+        element.classList.add("playing");
+
+        if (audioPlayer.src.endsWith(source)) {
+            if (!audioPlayer.paused) {
+                btn.innerHTML = playControllerIcon;
+                audioPlayer.pause();
+            } else {
+                btn.innerHTML = pauseControllerIcon;
+                audioPlayer.play();
+            }
+        } else {
+            console.log("new play");
+            //btn.innerHTML = pauseControllerIcon;
+            audioPlayer.src = source;
+            //audioPlayer.play();
+            playPlaylist();
+        }
+    };
+    el.appendChild(btn);
+    element.appendChild(el);
+    el = document.createElement("div");
+    let div = document.createElement("div");
+    div.appendChild(document.createTextNode(name));
+    sp = document.createElement("span");
+    for (publisher of publishers) {
+        let pub = document.createElement("a");
+        pub.innerText = publisher.name;
+        pub.href = `/user?id=${publisher.id}`;
+        sp.appendChild(pub);
+        sp.appendChild(document.createTextNode(", "));
+    }
+    sp.removeChild(sp.lastChild);
+    div.appendChild(sp);
+    el.appendChild(div);
+    element.appendChild(el);
+    el = document.createElement("div");
+    el.className = "duration";
+    el.innerText = getDuration(duration, true);
+    element.appendChild(el);
+    element.onclick = () => {
+        let selected = document
+            .querySelector("#songsContainer")
+            .querySelector(".selected");
+        if (selected !== null) selected.classList.remove("selected");
+        element.classList.add("selected");
+    };
+    return element;
+}
+
 function squaredPlaylist(id, name) {
     let element = document.createElement("div");
 
@@ -334,6 +433,21 @@ function squaredPlaylist(id, name) {
     return element;
 }
 
+function squaredProfile(id, name) {
+    let element = document.createElement("div");
+
+    element.className = "userContainer";
+    let el = document.createElement("a");
+    let img = document.createElement("img");
+    img.src = `/media/images/users/${id}.png`;
+    el.className = "title";
+    el.appendChild(img);
+    el.appendChild(document.createTextNode(name));
+    el.href = `/user?id=${id}`;
+    element.appendChild(el);
+    return element;
+}
+
 function audioController() {
     const element = document.createElement("div");
     element.classList.add("audioController");
@@ -377,6 +491,8 @@ function audioController() {
         tit.innerText = song.Name;
         tit.href = `/playlist?id=${song.AlbumID}`;
     };
+    //! Bug su aggiunta publisher 2 volte, dato che c'è la funzione async 
+    //! e il play concorre con il setSongInfo qui sotto
     setSongInfo();
 
     audioPlayer.addEventListener("play", setSongInfo);

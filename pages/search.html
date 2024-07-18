@@ -1,0 +1,156 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Search</title>
+        <link rel="stylesheet" href="style/common.css" />
+        <link rel="stylesheet" href="style/search.css" />
+        <script src="/js/jquery-3.7.1.slim.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script>
+            const query = window.location.search.substring(1);
+            async function getData() {
+                if (query === "") {
+                    return;
+                }
+                let res = await fetch(`/api/search-songs?song=${query}`);
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const songs = await res.json();
+
+                if (songs.length === 0) $("#songsCont").hide();
+
+                songs.forEach(async (song) => {
+                    let res = await fetch(
+                        `/api/get-song-data?songId=${song._id}`
+                    );
+                    if (res.status === 404) {
+                        //TODO: error
+                        return;
+                    }
+                    const data = await res.json();
+
+                    let publishers = [];
+
+                    for (let publisher of data.publishers) {
+                        res = await fetch(
+                            `/api/get-user-data?userId=${publisher.PublisherID}`
+                        );
+
+                        if (res.status === 404) {
+                            //TODO: error
+                            return;
+                        }
+                        const pub = await res.json();
+                        publishers.push({ name: pub.Name, id: pub._id });
+                    }
+
+                    const card = songCardSmall(
+                        data._id,
+                        data.Name,
+                        publishers,
+                        data.Duration
+                    );
+
+                    $("#songsCont").append(card);
+                    console.log(data);
+                });
+
+                res = await fetch(`/api/search-playlists?playlist=${query}`);
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const playlists = await res.json();
+
+                if (playlists.length === 0) $("#playlistsCont").hide();
+
+                playlists.forEach((playlist) => {
+                    const square = squaredPlaylist(playlist._id, playlist.Name);
+
+                    $("#playlistsCont").append(square);
+                });
+
+                res = await fetch(`/api/search-users?user=${query}`);
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const users = await res.json();
+
+                if (users.length === 0) $("#usersCont").hide();
+
+                users.forEach((user) => {
+                    const square = squaredProfile(user._id, user.Name);
+
+                    $("#usersCont").append(square);
+                });
+            }
+            //getData();
+            setTimeout(getData, 100);
+
+            let typingTimer;
+
+            function search(e) {
+                window.location.search = e.currentTarget.value;
+            }
+        </script>
+    </head>
+    <body>
+        <div id="playlistContainer">
+            <div class="playlistView">
+                <div id="publicPlaylistsContainer">
+                    <div class="searchInput">
+                        <input
+                            type="search"
+                            placeholder="What do you want to listen to?"
+                        />
+                        <div class="searchIcon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    <h1>List all</h1>
+                    <div id="songsCont">
+                        <h2>Songs</h2>
+                    </div>
+                    <div id="playlistsCont">
+                        <h2>Playlists</h2>
+                    </div>
+                    <div id="usersCont">
+                        <h2>Users</h2>
+                    </div>
+                    <!-- TODO: squared playlists container -->
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        const playlistCont = $("#playlistContainer")[0];
+        playlistCont.insertBefore(Navbar(), playlistCont.childNodes[0]);
+        document.body.appendChild(audioController());
+        $('input[type="search"]').val(query);
+        $('input[type="search"]').on("keyup", (e) => {
+            clearTimeout(typingTimer);
+            if (e.ctrlKey || e.altKey || e.shiftKey) return;
+            typingTimer = setTimeout(() => search(e), 500);
+        });
+        $('input[type="search"]').on("keydown", (e) => {
+            clearTimeout(typingTimer);
+        });
+    </script>
+</html>

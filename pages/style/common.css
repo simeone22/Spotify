@@ -1,0 +1,414 @@
+body {
+    background-color: black;
+    color: white;
+    margin: 0;
+}
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.size-6 {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.size-8 {
+    width: 2rem;
+    height: 2rem;
+}
+
+img {
+    border-radius: 2.5%;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.songContainer:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.songContainer:hover * {
+    color: white;
+}
+
+.songContainer:hover .playButton ~ span {
+    display: none;
+}
+
+.songContainer:hover .playButton {
+    display: block;
+}
+
+.songContainer .playButton * {
+    margin: 0;
+}
+
+.songContainer .playButton:hover {
+    cursor: pointer;
+}
+
+.songContainer .playButton {
+    display: none;
+    border: none;
+    background: none;
+    float: left;
+    margin: 0;
+}
+
+.songContainer {
+    width: 100%;
+    margin: 10 auto;
+}
+
+.songContainer * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: rgb(200, 200, 200);
+    font-weight: 600;
+}
+
+.songContainer img {
+    width: 8%;
+}
+
+.songContainer .title div {
+    color: white;
+}
+.songContainer .title div span {
+    display: block;
+    margin: 0;
+    font-size: small;
+    font-weight: 300;
+}
+
+#songsContainer {
+    width: 100%;
+    margin: 10 auto;
+}
+
+#songsContainer .header {
+    width: 100%;
+    margin: 0 auto;
+}
+#songsContainer .header * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#songsContainer .orderId {
+    width: 1%;
+}
+
+#songsContainer .title {
+    width: 32%;
+}
+
+#songsContainer .album {
+    width: 26%;
+}
+
+#songsContainer .publicationDate {
+    width: 26%;
+}
+
+#songsContainer .duration {
+    width: 3%;
+}
+
+#songsContainer .duration * {
+    margin: 0;
+}
+
+.songContainer.selected {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.songContainer.selected * {
+    color: white;
+}
+
+.songContainer.selected .playButton {
+    display: block;
+}
+
+.songContainer.selected .playButton ~ span {
+    display: none;
+}
+
+.songContainer.playing * {
+    color: #1ed861 !important;
+}
+
+.playButtonController {
+    color: black;
+    background-color: #1ed861;
+    border-radius: 50%;
+    cursor: pointer;
+    aspect-ratio: 1;
+    border: none;
+    height: 6%;
+    margin: 0;
+}
+
+.playlistContainer:hover .playButton {
+    display: block;
+}
+
+.playlistContainer .playButton * {
+    margin: auto;
+}
+
+.playlistContainer .playButton:hover {
+    cursor: pointer;
+}
+
+.playlistContainer .playButton {
+    position: absolute;
+    bottom: 14%;
+    right: 9%;
+    display: none;
+    float: left;
+    color: black;
+    background-color: #1ed861;
+    border-radius: 50%;
+    cursor: pointer;
+    aspect-ratio: 1;
+    border: none;
+    height: 20%;
+    margin: 0;
+    margin: 0;
+}
+
+.playlistContainer {
+    display: block;
+    width: 11%;
+    padding: 5;
+    position: relative;
+    overflow: hidden;
+    text-wrap: nowrap;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 2.5%;
+}
+
+.playlistContainer:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.playlistContainer * {
+    display: block;
+    text-decoration: none;
+}
+
+.playlistContainer img {
+    margin: auto auto;
+    height: 20%;
+    object-fit: cover;
+    aspect-ratio: 1;
+}
+
+.playlistContainer .title {
+    text-decoration: none;
+    width: 100%;
+    max-width: 200px;
+    color: white;
+    overflow: hidden;
+    text-wrap: nowrap;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.audioController {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    bottom: 0;
+    height: 8%;
+    width: 98%;
+    background-color: black;
+    padding: 1%;
+    color: rgb(200, 200, 200);
+    stroke: rgb(200, 200, 200);
+}
+.audioController div {
+    width: 20%;
+    height: 100%;
+}
+
+.audioController .controls {
+    width: 60%;
+}
+
+.audioController .playButton * {
+    margin: 0;
+}
+
+.audioController button {
+    width: 3%;
+    aspect-ratio: 1;
+    display: block;
+    border: none;
+    float: left;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.audioController .playButton {
+    color: black;
+    stroke: black;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.audioController .moveSong * {
+    margin: 0;
+}
+
+.audioController .moveSong:hover {
+    color: white;
+}
+
+.audioController .moveSong {
+    margin: 0 2%;
+    background-color: transparent;
+}
+
+.audioController .controlsButtons {
+    display: flex;
+    text-align: center;
+    height: 50%;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+.audioController .controlsTime {
+    height: 50%;
+    width: 100%;
+}
+
+.audioController .controlsTime div {
+    width: 100%;
+    height: 100%;
+}
+
+.audioController .controlsTime .slider {
+    width: 90%;
+    height: 20%;
+    margin: 1%;
+    background: rgb(200, 200, 200);
+    accent-color: white;
+}
+
+.audioController .controlsTime .slider:hover {
+    accent-color: #1ed861;
+}
+
+.audioController .controlsTime .slider::-webkit-slider-thumb:hover {
+    cursor: pointer;
+}
+
+.audioController .controlsTime .slider::-moz-range-thumb:hover {
+    cursor: pointer;
+}
+
+.audioController .songDisplay * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.audioController .songDisplay img {
+    margin: auto auto;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 1;
+}
+
+.audioController .songDisplay div {
+    font-weight: 600;
+    color: white;
+    width: 70%;
+    height: unset;
+}
+.audioController .songDisplay div * {
+    width: 100%;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+}
+
+.audioController .songDisplay div span {
+    display: block;
+    margin: 0;
+    font-size: small;
+    color: rgb(200, 200, 200) !important;
+    font-weight: 300;
+}
+
+.audioController .volumeButton * {
+    margin: 0;
+}
+
+.audioController .volumeButton:hover {
+    color: white;
+}
+
+.audioController .volumeButton {
+    margin: 0 2%;
+    background-color: transparent;
+}
+
+.audioController .miscControl {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.audioController .miscControl * {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.audioController .volumeButton {
+    width: 5%;
+}
+
+.audioController .volumeButton * {
+    margin: 0px;
+}
+
+.audioController .miscControl .slider {
+    width: 40%;
+    height: 20%;
+    margin: 1%;
+    background: rgb(200, 200, 200);
+    accent-color: white;
+}
+
+.audioController .miscControl .slider:hover {
+    accent-color: #1ed861;
+}
+
+.audioController .miscControl .slider::-webkit-slider-thumb:hover {
+    cursor: pointer;
+}
+
+.audioController .miscControl .slider::-moz-range-thumb:hover {
+    cursor: pointer;
+}
+

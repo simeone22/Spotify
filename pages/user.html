@@ -1,0 +1,121 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User</title>
+        <link rel="stylesheet" href="style/common.css" />
+        <link rel="stylesheet" href="style/user.css" />
+        <script src="/js/jquery-3.7.1.slim.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script>
+            async function getData() {
+                const params = getParameters();
+                let res = await fetch(
+                    `/api/get-user-data?userId=${params["id"]}`
+                );
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const data = await res.json();
+
+                document.documentElement.style.setProperty(
+                    "--playlist-bg-img",
+                    `url(/media/images/users/${data._id}.png)`
+                );
+
+                if (data.IsPublisher) {
+                    $("#Image").addClass("publisher");
+                    $(".infoContainer").addClass("publisherInfo");
+                    let albums = document.createElement("div");
+                    albums.id = "Albums";
+                    let h1 = document.createElement("h1");
+                    h1.innerText = "Albums";
+                    albums.appendChild(h1);
+                    let cont = document.querySelector("#contentContainer");
+                    cont.insertBefore(albums, cont.firstChild);
+                }
+
+                $("#Image").attr("src", `/media/images/users/${data._id}.png`);
+
+                $("#Name").text(data.Name);
+
+                const publicPlaylists = data.playlists.filter(
+                    (p) => p.IsPublic
+                );
+
+                $("#PlaylitsNumber").text(publicPlaylists.length);
+
+                publicPlaylists.forEach((playlist) => {
+                    const square = squaredPlaylist(playlist._id, playlist.Name);
+                    if (data.IsPublisher) {
+                        $("#Albums").append(square);
+                    } else {
+                        $("#publicPlaylistsContainer").append(square);
+                    }
+                });
+
+                if (data.IsPublisher) {
+                    res = await fetch(
+                        `/api/get-playlists-with-user?userId=${params["id"]}`
+                    );
+
+                    if (res.status === 404) {
+                        //TODO: error
+                        return;
+                    }
+
+                    const playlistsPresent = await res.json();
+
+                    playlistsPresent.forEach((playlist) => {
+                        const square = squaredPlaylist(
+                            playlist._id,
+                            playlist.Name
+                        );
+                        $("#publicPlaylistsContainer").append(square);
+                    });
+
+                    if (playlistsPresent.length === 0) {
+                        $("#publicPlaylistsContainer").hide();
+                    }
+
+                    if (publicPlaylists.length === 0) {
+                        $("#Albums").hide();
+                    }
+                } else {
+                    if (publicPlaylists.length === 0) {
+                        $("#publicPlaylistsContainer").hide();
+                    }
+                }
+
+                const playlistCont =
+                    document.querySelector("#playlistContainer");
+                playlistCont.insertBefore(Navbar(), playlistCont.firstChild);
+                document.body.appendChild(audioController());
+            }
+            getData();
+        </script>
+    </head>
+    <body>
+        <div class="background"></div>
+        <div id="playlistContainer">
+            <div class="playlistView">
+                <div class="infoContainer">
+                    <img id="Image" />
+                    <div id="playlistInfo">
+                        <span id="Name"></span>
+                        <div>
+                            <span id="PlaylitsNumber"></span> public playlists
+                        </div>
+                    </div>
+                </div>
+                <div id="contentContainer">
+                    <div id="publicPlaylistsContainer">
+                        <h1>Public playlists</h1>
+                        <!-- TODO: squared playlists container -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -42,6 +42,9 @@
 }
 
 .playlistView {
+    margin: 0 0;
+    margin-top: 10px;
+    margin-left: 10px;
     width: max-content;
     display: flex;
     flex-direction: column;
@@ -50,9 +53,6 @@
 }
 .playlistView .infoContainer{
     height: 28%;
-    margin: 0 0;
-    padding-top: 10px;
-    padding-left: 10px;
 }
 
 #playlistInfo {
@@ -61,7 +61,7 @@
 }
 
 #Image {
-    height: 60%;
+    height: 100%;
     object-fit: cover;
     resize: both;
     aspect-ratio: 1;
@@ -95,35 +95,6 @@
     margin: 0 0 1% 0;
 }
 
-img.publisher{
-    width: 100%;
-    position: absolute;
-    border-radius: 0%;
-    height: initial;
-    z-index: -1;
-}
-
-.playlistView:has(.publisher){
-    margin: 0;
-    width: 100%%;
-}
-
-#publicPlaylistsContainer{
-    margin: 30 0 0 0;
-}
-
-#contentContainer {
-    margin-top: 30px;
-    padding-left: 10px;
-    flex-grow: 1;
-    backdrop-filter: blur(1000px);
-}
-
-.publisherInfo {
-    height: 40% !important;
-}
-.publisherInfo #Image {
-    position: absolute;
-    top: 0;
-    left: 0;
+#IsPublic {
+    cursor: default;
 }

@@ -7,10 +7,6 @@ const playControllerIconWS =
 const pauseControllerIconWS =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>';
 
-const playIcon =
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" /></svg>';
-const pauseIcon =
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>';
 const nextIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16" stroke-width="1.5" class="size-8"><path stroke-linecap="round" transform="translate(0, -4.5)" stroke-linejoin="round" d="M21 7.5M13 7.5V18M3 16.811V8.69c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811Z" /></svg>';
 const prevIcon =
@@ -19,6 +15,12 @@ const volumeIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>';
 const mutedVolumeIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>';
+const homeIcon =
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>';
+const searchIcon =
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>';
+const stackIcon = 
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122" /></svg>';
 
 let audioPlayer = getAudioPlayer();
 
@@ -111,13 +113,22 @@ function getDuration(timeS, shortForm = false) {
 
     if (periods.hours > 0) {
         if (shortForm === true)
-            returnString = `${periods.hours}:${periods.minutes.toString().padStart(2, '0')}`;
-        else returnString = `${periods.hours} hours ${periods.minutes.toString().padStart(2, '0')} minutes`;
+            returnString = `${periods.hours}:${periods.minutes
+                .toString()
+                .padStart(2, "0")}`;
+        else
+            returnString = `${periods.hours} hours ${periods.minutes
+                .toString()
+                .padStart(2, "0")} minutes`;
     } else {
         if (shortForm === true)
-            returnString = `${periods.minutes}:${periods.seconds.toString().padStart(2, '0')}`;
+            returnString = `${periods.minutes}:${periods.seconds
+                .toString()
+                .padStart(2, "0")}`;
         else
-            returnString = `${periods.minutes} minutes ${periods.seconds.toString().padStart(2, '0')} seconds`;
+            returnString = `${periods.minutes} minutes ${periods.seconds
+                .toString()
+                .padStart(2, "0")} seconds`;
     }
 
     return returnString;
@@ -146,7 +157,10 @@ function songCard(
     el.className = "orderId";
 
     let btn = document.createElement("button");
-    btn.innerHTML = (audioPlayer.src.endsWith(source) && !audioPlayer.paused) ? pauseIcon : playIcon;
+    btn.innerHTML =
+        audioPlayer.src.endsWith(source) && !audioPlayer.paused
+            ? pauseControllerIcon
+            : playControllerIcon;
     btn.className = "playButton";
 
     if (audioPlayer.src.endsWith(source)) {
@@ -154,38 +168,38 @@ function songCard(
     }
 
     audioPlayer.addEventListener("change", () => {
-        btn.innerHTML = playIcon;
+        btn.innerHTML = playControllerIcon;
     });
 
     audioPlayer.addEventListener("play", () => {
-        if(!audioPlayer.src.endsWith(source)) return;
-        btn.innerHTML = pauseIcon;
+        if (!audioPlayer.src.endsWith(source)) return;
+        btn.innerHTML = pauseControllerIcon;
     });
 
     audioPlayer.addEventListener("pause", () => {
-        if(!audioPlayer.src.endsWith(source)) return;
-        btn.innerHTML = playIcon;
+        if (!audioPlayer.src.endsWith(source)) return;
+        btn.innerHTML = playControllerIcon;
     });
 
     btn.onclick = () => {
         let oldPlaying = document.querySelector(".playing");
         if (oldPlaying !== null) {
-            oldPlaying.querySelector(".playButton").innerHTML = playIcon;
+            oldPlaying.querySelector(".playButton").innerHTML = playControllerIcon;
             oldPlaying.classList.remove("playing");
         }
         element.classList.add("playing");
 
         if (audioPlayer.src.endsWith(source)) {
             if (!audioPlayer.paused) {
-                btn.innerHTML = playIcon;
+                btn.innerHTML = playControllerIcon;
                 audioPlayer.pause();
             } else {
-                btn.innerHTML = pauseIcon;
+                btn.innerHTML = pauseControllerIcon;
                 audioPlayer.play();
             }
         } else {
             console.log("new play");
-            //btn.innerHTML = pauseIcon;
+            //btn.innerHTML = pauseControllerIcon;
             audioPlayer.src = source;
             //audioPlayer.play();
             playPlaylist();
@@ -215,10 +229,28 @@ function songCard(
     div.appendChild(sp);
     el.appendChild(div);
     element.appendChild(el);
+    el = document.createElement("div");
+    el.className = "album";
+    let link = document.createElement("a");
+    link.innerText = albumName;
+    link.href = `/playlist?id=${albumId}`;
+    el.appendChild(link);
     element.appendChild(el);
-    el = document.createElement("span");
+    el = document.createElement("div");
+    el.className = "publicationDate";
+    el.innerText = getDate(publicationDate);
+    element.appendChild(el);
+    el = document.createElement("div");
+    el.className = "duration";
     el.innerText = getDuration(duration, true);
     element.appendChild(el);
+    element.onclick = () => {
+        let selected = document
+            .querySelector("#songsContainer")
+            .querySelector(".selected");
+        if (selected !== null) selected.classList.remove("selected");
+        element.classList.add("selected");
+    };
     return element;
 }
 
@@ -476,9 +508,19 @@ function audioController() {
     btn = document.createElement("button");
     btn.innerHTML = prevIcon;
     btn.className = "moveSong";
+    btn.addEventListener("click", (e) => {
+        if (audioPlayer.onended) {
+            audioPlayer.onended();
+        } else {
+            audioPlayer.currentTime = audioPlayer.duration;
+            audioPlayer.src = "";
+        }
+    });
     controlsButtons.appendChild(btn);
     const playbtn = document.createElement("button");
-    playbtn.innerHTML = audioPlayer.paused ? playControllerIconWS : pauseControllerIconWS;
+    playbtn.innerHTML = audioPlayer.paused
+        ? playControllerIconWS
+        : pauseControllerIconWS;
     playbtn.addEventListener("click", () => {
         if (audioPlayer.paused) audioPlayer.play();
         else audioPlayer.pause();
@@ -495,12 +537,21 @@ function audioController() {
     btn.innerHTML = nextIcon;
     btn.className = "moveSong";
     btn.addEventListener("click", (e) => {
-        if (audioPlayer.onended) {
-            audioPlayer.onended();
-        } else {
-            audioPlayer.currentTime = audioPlayer.duration;
+        let data = localStorage.getItem("tracks");
+        if (data === null) {
             audioPlayer.src = "";
+            return;
         }
+        const tracks = JSON.parse(data);
+        let cIdx = tracks.findIndex(
+            (el) =>
+                el.SongID === audioPlayer.src.split("/").pop().split(".mp3")[0]
+        );
+        if (cIdx === 0) {
+            cIdx = tracks.length - 1;
+        }
+        audioPlayer.src = `/media/audio/songs/${tracks[cIdx].SongID}.mp3`;
+        audioPlayer.play();
     });
     controlsButtons.appendChild(btn);
     div.appendChild(controlsButtons);
@@ -584,4 +635,42 @@ function timeController() {
     return element;
 }
 
+function Navbar() {
+    let nav = document.createElement("nav");
+    nav.classList.add("navbar");
+    let div = document.createElement("div");
+    div.classList.add("nav-group");
+    let el = document.createElement("a");
+    el.href = "/home";
+    el.innerHTML = homeIcon;
+    let tooltip = document.createElement("span");
+    tooltip.classList.add("tooltip");
+    tooltip.innerText = "Home";
+    el.appendChild(tooltip);
+    div.appendChild(el);
+    el = document.createElement("a");
+    el.href = "/search";
+    el.innerHTML = searchIcon;
+    tooltip = document.createElement("span");
+    tooltip.classList.add("tooltip");
+    tooltip.innerText = "Search";
+    el.appendChild(tooltip);
+    div.appendChild(el);
+    nav.appendChild(div);
+    div = document.createElement("div");
+    div.classList.add("nav-group");
+    div.classList.add("library");
+    let btn = document.createElement("button");
+    btn.addEventListener("click", () => {
+
+    });
+    btn.innerHTML = stackIcon;
+    tooltip = document.createElement("span");
+    tooltip.classList.add("tooltip");
+    tooltip.innerText = "Expand your library";
+    btn.appendChild(tooltip);
+    div.appendChild(btn);
+    nav.appendChild(div);
+    return nav;
+}
 //setTimeout(() => window.location.reload(), 1000);

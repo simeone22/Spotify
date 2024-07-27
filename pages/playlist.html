@@ -1,0 +1,247 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Playlist</title>
+        <link rel="stylesheet" href="style/common.css" />
+        <link rel="stylesheet" href="style/playlist.css" />
+        <link rel="manifest" href="manifest.json" />
+        <script src="/js/jquery-3.7.1.slim.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script>
+            let songs;
+            async function getData() {
+                const params = getParameters();
+                let res = await fetch(
+                    `/api/get-playlist-data?playlistId=${params["id"]}`
+                );
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const data = await res.json();
+
+                songs = data.songs;
+
+                document.documentElement.style.setProperty(
+                    "--playlist-bg-img",
+                    `url(/media/images/playlists/${data._id}.png)`
+                );
+                if (data.IsPublic === true) {
+                    $("#IsPublic").text("Public playlist");
+                } else {
+                    $("#IsPublic").text("Private playlist");
+                }
+
+                $("#Name").text(data.Name);
+                $("#Image").attr(
+                    "src",
+                    `/media/images/playlists/${data._id}.png`
+                );
+
+                res = await fetch(`/api/get-user-data?userId=${data.UserID}`);
+                if (res.status === 404) {
+                    //TODO: error
+                    return;
+                }
+                const userInfo = await res.json();
+
+                $("#userInfo img").attr(
+                    "src",
+                    `/media/images/users/${data.UserID}.png`
+                );
+
+                $("#Publisher").attr("href", `/user?id=${data.UserID}`);
+
+                $("#Publisher").text(userInfo.Name);
+
+                $("#SongsNumber").text(data.SongNumber);
+                $("#Duration").text(getDuration(data.TotalDuration));
+
+                let songsCards = [];
+                let shown = 0;
+
+                data.songs.forEach(async (song, key, orig) => {
+                    let res = await fetch(
+                        `/api/get-song-data?songId=${song.SongID}`
+                    );
+                    if (res.status === 404) {
+                        //TODO: error
+                        return;
+                    }
+                    const data = await res.json();
+
+                    res = await fetch(
+                        `/api/get-playlist-data?playlistId=${data.AlbumID}`
+                    );
+
+                    if (res.status === 404) {
+                        //TODO: error
+                        return;
+                    }
+                    const AlbumInfo = await res.json();
+
+                    let publishers = [];
+
+                    for (let publisher of data.publishers) {
+                        res = await fetch(
+                            `/api/get-user-data?userId=${publisher.PublisherID}`
+                        );
+
+                        if (res.status === 404) {
+                            //TODO: error
+                            return;
+                        }
+                        const pub = await res.json();
+                        publishers.push({ name: pub.Name, id: pub._id });
+                    }
+
+                    let card = songCard(
+                        key + 1,
+                        data._id,
+                        data.Name,
+                        publishers,
+                        AlbumInfo.Name,
+                        data.AlbumID,
+                        data.PublicationDate,
+                        data.Duration
+                    );
+
+                    $("#songsContainer").append(card);
+
+                    //TODO: Generazione ordinata
+                    /*if(key === shown) {
+                        $("#songsContainer").append(card);
+                        shown++;
+                        songsCards.every(card => {
+                            if(shown === card.id){
+                                $("#songsContainer").append(songsCards.shift());
+                                shown++;
+                                return true;
+                            }
+                            return false;
+                        })
+                    }
+                    else {
+                        songsCards.push({id: key, value: card});
+                        songsCards = songsCards.sort((a, b) => b.id - a.id);
+                    }
+                    if(orig.length === key + 1){
+                        while(songsCards.length !== 0){
+                            songsCards.every(card => {
+                                if(shown === card.id){
+                                    $("#songsContainer").append(songsCards.shift());
+                                    shown++;
+                                    return true;
+                                }
+                                return false;
+                            });
+                        }
+                    }*/
+                });
+                //TODO: Use data
+                document
+                    .querySelectorAll(".playButtonController")
+                    .forEach((playButton) => {
+                        playButton.addEventListener("click", playPlaylist);
+                        if (
+                            songs.some((song) =>
+                                audioPlayer.src.endsWith(
+                                    `/media/audio/songs/${song.SongID}.mp3`
+                                )
+                            )
+                        ) {
+                            if (audioPlayer.paused) {
+                                playButton.innerHTML = playControllerIcon;
+                            } else {
+                                playButton.innerHTML = pauseControllerIcon;
+                            }
+                        }
+                        audioPlayer.addEventListener("pause", (e) => {
+                            playButton.innerHTML = playControllerIcon;
+                        });
+                        audioPlayer.addEventListener("play", (e) => {
+                            playButton.innerHTML = pauseControllerIcon;
+                        });
+                    });
+                const playlistCont = document.querySelector("#playlistContainer")
+                playlistCont.insertBefore(Navbar(), playlistCont.firstChild);
+                document.body.appendChild(audioController());
+            }
+            function playPlaylist() {
+                const song = songs.find((song) =>
+                    audioPlayer.src.endsWith(
+                        `/media/audio/songs/${song.SongID}.mp3`
+                    )
+                );
+                const btn = document.querySelector(".playButtonController");
+                if (song !== undefined) {
+                    if (!audioPlayer.paused) {
+                        btn.innerHTML = playControllerIcon;
+                        audioPlayer.pause();
+                    } else {
+                        btn.innerHTML = pauseControllerIcon;
+                        audioPlayer.play();
+                    }
+                } else {
+                    localStorage.setItem("tracks", JSON.stringify(songs));
+                    btn.innerHTML = pauseControllerIcon;
+                    audioPlayer.src = `/media/audio/songs/${songs[0].SongID}.mp3`;
+                    audioPlayer.play();
+                }
+            }
+            getData();
+        </script>
+    </head>
+    <body>
+        <div class="background"></div>
+        <div id="playlistContainer">
+            <div class="playlistView">
+                <div class="infoContainer">
+                    <img id="Image" />
+                    <div id="playlistInfo">
+                        <span id="IsPublic"></span>
+                        <span id="Name"></span>
+                        <div>
+                            <div id="userInfo">
+                                <img />
+                                <a id="Publisher"></a>
+                            </div>
+                            •
+                            <span id="SongsNumber"></span> songs,
+                            <span id="Duration"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="songsContainer">
+                    <div id="playlistController">
+                        <button class="playButtonController"></button>
+                    </div>
+                    <div class="header">
+                        <div class="orderId">#</div>
+                        <div class="title">Title</div>
+                        <div class="album">Album</div>
+                        <div class="publicationDate">Publication date</div>
+                        <div class="duration">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

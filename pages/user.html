@@ -26,6 +26,14 @@
 
                 if (data.IsPublisher) {
                     $("#Image").addClass("publisher");
+                    $(".infoContainer").addClass("publisherInfo");
+                    let albums = document.createElement("div");
+                    albums.id = "Albums";
+                    let h1 = document.createElement("h1");
+                    h1.innerText = "Albums";
+                    albums.appendChild(h1);
+                    let cont = document.querySelector("#contentContainer");
+                    cont.insertBefore(albums, cont.firstChild);
                 }
 
                 $("#Image").attr("src", `/media/images/users/${data._id}.png`);
@@ -40,12 +48,49 @@
 
                 publicPlaylists.forEach((playlist) => {
                     const square = squaredPlaylist(playlist._id, playlist.Name);
-
-                    $("#publicPlaylistsContainer").append(square);
+                    if (data.IsPublisher) {
+                        $("#Albums").append(square);
+                    } else {
+                        $("#publicPlaylistsContainer").append(square);
+                    }
                 });
 
-                const playlistCont = document.querySelector("#playlistContainer")
-                playlistCont.insertBefore(Navbar(), playlistCont.childNodes[0]);
+                if (data.IsPublisher) {
+                    res = await fetch(
+                        `/api/get-playlists-with-user?userId=${params["id"]}`
+                    );
+
+                    if (res.status === 404) {
+                        //TODO: error
+                        return;
+                    }
+
+                    const playlistsPresent = await res.json();
+
+                    playlistsPresent.forEach((playlist) => {
+                        const square = squaredPlaylist(
+                            playlist._id,
+                            playlist.Name
+                        );
+                        $("#publicPlaylistsContainer").append(square);
+                    });
+
+                    if (playlistsPresent.length === 0) {
+                        $("#publicPlaylistsContainer").hide();
+                    }
+
+                    if (publicPlaylists.length === 0) {
+                        $("#Albums").hide();
+                    }
+                } else {
+                    if (publicPlaylists.length === 0) {
+                        $("#publicPlaylistsContainer").hide();
+                    }
+                }
+
+                const playlistCont =
+                    document.querySelector("#playlistContainer");
+                playlistCont.insertBefore(Navbar(), playlistCont.firstChild);
                 document.body.appendChild(audioController());
             }
             getData();
@@ -55,7 +100,7 @@
         <div class="background"></div>
         <div id="playlistContainer">
             <div class="playlistView">
-                <div>
+                <div class="infoContainer">
                     <img id="Image" />
                     <div id="playlistInfo">
                         <span id="Name"></span>
@@ -64,9 +109,11 @@
                         </div>
                     </div>
                 </div>
-                <div id="publicPlaylistsContainer">
-                    <h1>Public playlists</h1>
-                    <!-- TODO: squared playlists container -->
+                <div id="contentContainer">
+                    <div id="publicPlaylistsContainer">
+                        <h1>Public playlists</h1>
+                        <!-- TODO: squared playlists container -->
+                    </div>
                 </div>
             </div>
         </div>

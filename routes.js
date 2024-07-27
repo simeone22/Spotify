@@ -37,6 +37,46 @@ export default function routes(db) {
         res.status(200).json(playlist);
     });
 
+    app.get("/api/get-playlists-with-user", async (req, res) => {
+        if (req.query.userId === undefined) {
+            res.status(400).send();
+            return;
+        }
+
+        const songPublishers = db.collection("SongPublishers");
+
+        const songsPublished = await songPublishers
+            .find({ PublisherID: req.query.userId })
+            .toArray();
+
+        if (songsPublished === null) {
+            res.status(404).send();
+            return;
+        }
+
+        const songsPlaylists = db.collection("SongsPlaylists");
+        const playlists = db.collection("Playlists");
+
+        let response = [];
+
+        for (let song of songsPublished) {
+            let playlistsFound = await songsPlaylists
+                .find({ SongID: song.SongID })
+                .toArray();
+            for (let playlist of playlistsFound) {
+                let playlistFound = await playlists.findOne({
+                    _id: new ObjectId(playlist.PlaylistID),
+                    UserID: { $ne: req.query.userId },
+                });
+                if (playlistFound !== null) {
+                    response.push(playlistFound);
+                }
+            }
+        }
+
+        res.status(200).json(response);
+    });
+
     app.get("/api/get-song-data", async (req, res) => {
         if (req.query.songId === undefined) {
             res.status(400).send();
@@ -104,7 +144,7 @@ export default function routes(db) {
 
         const songsFound = await songs
             .find({
-                Name: { $regex: req.query.song, $options: 'i' },
+                Name: { $regex: req.query.song, $options: "i" },
             })
             .limit(4)
             .toArray();
@@ -127,7 +167,7 @@ export default function routes(db) {
 
         const playlistsFound = await playlists
             .find({
-                Name: { $regex: req.query.playlist, $options: 'i' },
+                Name: { $regex: req.query.playlist, $options: "i" },
                 IsPublic: true,
             })
             .toArray();
@@ -150,7 +190,7 @@ export default function routes(db) {
 
         const usersFound = await users
             .find({
-                Name: { $regex: req.query.user, $options: 'i' },
+                Name: { $regex: req.query.user, $options: "i" },
             })
             .toArray();
 

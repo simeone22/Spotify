@@ -42,9 +42,6 @@
 }
 
 .playlistView {
-    margin: 0 0;
-    margin-top: 10px;
-    margin-left: 10px;
     width: max-content;
     display: flex;
     flex-direction: column;
@@ -53,6 +50,9 @@
 }
 .playlistView .infoContainer{
     height: 28%;
+    margin: 0 0;
+    padding-top: 10px;
+    padding-left: 10px;
 }
 
 #playlistInfo {
@@ -61,7 +61,7 @@
 }
 
 #Image {
-    height: 100%;
+    height: 60%;
     object-fit: cover;
     resize: both;
     aspect-ratio: 1;
@@ -109,5 +109,21 @@ img.publisher{
 }
 
 #publicPlaylistsContainer{
+    margin: 30 0 0 0;
+}
+
+#contentContainer {
+    margin-top: 30px;
+    padding-left: 10px;
     flex-grow: 1;
+    backdrop-filter: blur(1000px);
+}
+
+.publisherInfo {
+    height: 40% !important;
+}
+.publisherInfo #Image {
+    position: absolute;
+    top: 0;
+    left: 0;
 }

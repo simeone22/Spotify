@@ -165,7 +165,7 @@
                         });
                     });
                 const playlistCont = document.querySelector("#playlistContainer")
-                playlistCont.insertBefore(Navbar(), playlistCont.childNodes[0]);
+                playlistCont.insertBefore(Navbar(), playlistCont.firstChild);
                 document.body.appendChild(audioController());
             }
             function playPlaylist() {

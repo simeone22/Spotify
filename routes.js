@@ -127,6 +127,11 @@ export default function routes(db) {
 
         const playlists = db.collection("Playlists");
 
+        if (user === null) {
+            res.status(404).send();
+            return;
+        }
+
         user.playlists = await playlists
             .find({ UserID: req.query.userId })
             .toArray();

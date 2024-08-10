@@ -19,8 +19,10 @@ const homeIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>';
 const searchIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>';
-const stackIcon = 
+const stackIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122" /></svg>';
+const noteIcon = 
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" /></svg>';
 
 let audioPlayer = getAudioPlayer();
 
@@ -184,7 +186,8 @@ function songCard(
     btn.onclick = () => {
         let oldPlaying = document.querySelector(".playing");
         if (oldPlaying !== null) {
-            oldPlaying.querySelector(".playButton").innerHTML = playControllerIcon;
+            oldPlaying.querySelector(".playButton").innerHTML =
+                playControllerIcon;
             oldPlaying.classList.remove("playing");
         }
         element.classList.add("playing");
@@ -254,12 +257,7 @@ function songCard(
     return element;
 }
 
-function songCardSmall(
-    id,
-    name,
-    publishers,
-    duration
-) {
+function songCardSmall(id, name, publishers, duration) {
     let element = document.createElement("div");
     const source = `/media/audio/songs/${id}.mp3`;
 
@@ -301,7 +299,8 @@ function songCardSmall(
     btn.onclick = () => {
         let oldPlaying = document.querySelector(".playing");
         if (oldPlaying !== null) {
-            oldPlaying.querySelector(".playButton").innerHTML = playControllerIcon;
+            oldPlaying.querySelector(".playButton").innerHTML =
+                playControllerIcon;
             oldPlaying.classList.remove("playing");
         }
         element.classList.add("playing");
@@ -491,7 +490,7 @@ function audioController() {
         tit.innerText = song.Name;
         tit.href = `/playlist?id=${song.AlbumID}`;
     };
-    //! Bug su aggiunta publisher 2 volte, dato che c'è la funzione async 
+    //! Bug su aggiunta publisher 2 volte, dato che c'è la funzione async
     //! e il play concorre con il setSongInfo qui sotto
     setSongInfo();
 
@@ -661,9 +660,7 @@ function Navbar() {
     div.classList.add("nav-group");
     div.classList.add("library");
     let btn = document.createElement("button");
-    btn.addEventListener("click", () => {
-
-    });
+    btn.addEventListener("click", () => {});
     btn.innerHTML = stackIcon;
     tooltip = document.createElement("span");
     tooltip.classList.add("tooltip");
@@ -673,4 +670,194 @@ function Navbar() {
     nav.appendChild(div);
     return nav;
 }
-//setTimeout(() => window.location.reload(), 1000);
+
+function songCardCompact(
+    id,
+    name,
+    publishers
+) {
+    let element = document.createElement("div");
+    const source = `/media/audio/songs/${id}.mp3`;
+
+    element.classList.add("songContainer");
+    element.classList.add("flex");
+
+    let el = document.createElement("div");
+    el.className = "orderId";
+
+    let btn = document.createElement("button");
+    btn.innerHTML =
+        audioPlayer.src.endsWith(source) && !audioPlayer.paused
+            ? pauseControllerIcon
+            : playControllerIcon;
+    btn.className = "playButton";
+
+    if (audioPlayer.src.endsWith(source)) {
+        element.classList.add("playing");
+    }
+
+    audioPlayer.addEventListener("change", () => {
+        btn.innerHTML = playControllerIcon;
+    });
+
+    audioPlayer.addEventListener("play", () => {
+        if (!audioPlayer.src.endsWith(source)) return;
+        btn.innerHTML = pauseControllerIcon;
+    });
+
+    audioPlayer.addEventListener("pause", () => {
+        if (!audioPlayer.src.endsWith(source)) return;
+        btn.innerHTML = playControllerIcon;
+    });
+
+    btn.onclick = () => {
+        let oldPlaying = document.querySelector(".playing");
+        if (oldPlaying !== null) {
+            oldPlaying.querySelector(".playButton").innerHTML =
+                playControllerIcon;
+            oldPlaying.classList.remove("playing");
+        }
+        element.classList.add("playing");
+
+        if (audioPlayer.src.endsWith(source)) {
+            if (!audioPlayer.paused) {
+                btn.innerHTML = playControllerIcon;
+                audioPlayer.pause();
+            } else {
+                btn.innerHTML = pauseControllerIcon;
+                audioPlayer.play();
+            }
+        } else {
+            console.log("new play");
+            //btn.innerHTML = pauseControllerIcon;
+            audioPlayer.src = source;
+            //audioPlayer.play();
+            playPlaylist();
+        }
+    };
+    el.appendChild(btn);
+    let sp = document.createElement("span");
+    sp.innerHTML = noteIcon;
+    el.appendChild(sp);
+    element.appendChild(el);
+    el = document.createElement("div");
+    let img = document.createElement("img");
+    img.src = `/media/images/songs/${id}.png`;
+    el.className = "title";
+    el.appendChild(img);
+    let div = document.createElement("div");
+    div.appendChild(document.createTextNode(name));
+    sp = document.createElement("span");
+    for (publisher of publishers) {
+        let pub = document.createElement("a");
+        pub.innerText = publisher.name;
+        pub.href = `/user?id=${publisher.id}`;
+        sp.appendChild(pub);
+        sp.appendChild(document.createTextNode(", "));
+    }
+    sp.removeChild(sp.lastChild);
+    div.appendChild(sp);
+    el.appendChild(div);
+    element.appendChild(el);
+    return element;
+}
+
+
+async function SongsInfoCard() {
+    let div = document.createElement("div");
+    div.classList.add("songcard");
+    let group = document.createElement("div");
+    group.classList.add("songcard-group");
+    let tit = document.createElement("h4");
+    let res = await fetch(
+        `/api/get-song-data?songId=${
+            audioPlayer.src.split("/").at(-1).split(".mp3")[0]
+        }`
+    );
+    if (res.status === 404) {
+        //TODO: error
+        return;
+    }
+    let songData = await res.json();
+
+    let data = localStorage.getItem("tracks");
+    let nextTrack = null;
+    if (data !== null) {
+        const tracks = JSON.parse(data);
+        let cIdx = tracks.findIndex(
+            (el) =>
+                el.SongID ===
+                audioPlayer.src.split("/").pop().split(".mp3")[0]
+        );
+        res = await fetch(
+            `/api/get-playlist-data?playlistId=${tracks[cIdx].PlaylistID}`
+        );
+        if (res.status === 404) {
+            //TODO: error
+            return;
+        }
+        data = await res.json();
+        tit.innerText = data.Name;
+        if (tracks.length > 1) {
+            cIdx = cIdx + 1 >= tracks.length ? 0 : cIdx + 1;
+            res = await fetch(`/api/get-song-data?songId=${tracks[cIdx].SongID}`);
+            if (res.status === 404) {
+                //TODO: error
+                return;
+            }
+            nextTrack = await res.json();
+        }
+    } else {
+        tit.innerText = songData.Name;
+    }
+    group.appendChild(tit);
+    let img = document.createElement("img");
+    img.src = `/media/images/songs/${songData._id}.png`;
+    group.appendChild(img);
+    let sTit = document.createElement("a");
+    sTit.innerText = songData.Name;
+    sTit.href = `/playlist?id=${songData.AlbumID}`;
+    sTit.classList.add("song-title");
+    group.appendChild(sTit);
+    let sp = document.createElement("span");
+    for (publisher of songData.publishers) {
+        res = await fetch(`/api/get-user-data?userId=${publisher.PublisherID}`);
+        if (res.status === 404) {
+            //TODO: error
+            return;
+        }
+        let publisherData = await res.json();
+        let pub = document.createElement("a");
+        pub.innerText = publisherData.Name;
+        pub.href = `/user?id=${publisherData._id}`;
+        sp.appendChild(pub);
+        sp.appendChild(document.createTextNode(", "));
+    }
+    sp.removeChild(sp.lastChild);
+    group.appendChild(sp);
+    // TODO: User info
+    div.appendChild(group);
+    if (nextTrack !== null) {
+        group = document.createElement("div");
+        group.classList.add("songcard-group");
+        tit = document.createElement("h4");
+        tit.innerText = "Next in queue";
+        group.appendChild(tit);
+        let publishers = [];
+        for (let publisher of nextTrack.publishers) {
+            res = await fetch(
+                `/api/get-user-data?userId=${publisher.PublisherID}`
+            );
+
+            if (res.status === 404) {
+                //TODO: error
+                return;
+            }
+            const pub = await res.json();
+            publishers.push({ name: pub.Name, id: pub._id });
+        }
+        group.appendChild(songCardCompact(nextTrack._id, nextTrack.Name, publishers));
+        div.appendChild(group);
+    }
+    return div;
+}

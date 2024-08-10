@@ -170,6 +170,7 @@
                     });
                 const playlistCont = document.querySelector("#playlistContainer")
                 playlistCont.insertBefore(Navbar(), playlistCont.firstChild);
+                playlistCont.appendChild(await SongsInfoCard());
                 document.body.appendChild(audioController());
             }
             function playPlaylist() {

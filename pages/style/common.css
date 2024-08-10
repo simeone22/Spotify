@@ -585,3 +585,45 @@ a:hover {
     flex-grow: 1;
     border-radius: 10px;
 }
+
+.songcard {
+    width: 20%;
+    height: 88%;
+    background: black;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.songcard .songcard-group {
+    background-color: #121212;
+    margin: 10;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 20;
+    /*align-items: center;
+    height: 100%;*/
+}
+
+.songcard .songcard-group .song-title {
+    font-size: 1.17em;
+    font-weight: bold;
+}
+
+.songcard .songcard-group h4 {
+    margin: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.songcard .songcard-group h4 {
+    margin-bottom: 10;
+}
+
+.songcard .songcard-group .playButton {
+    margin-left: 10px;
+    margin-right: 10px;
+}

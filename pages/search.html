@@ -164,7 +164,7 @@
     </body>
     <script>
         const playlistCont = $("#playlistContainer")[0];
-        playlistCont.insertBefore(Navbar(), playlistCont.firstChild);
+        (async () => playlistCont.insertBefore(await Navbar(), playlistCont.firstChild))()
         document.body.appendChild(audioController());
         $('input[type="search"]').val(query);
         $('input[type="search"]').on("keyup", (e) => {

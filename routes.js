@@ -77,6 +77,26 @@ export default function routes(db) {
         res.status(200).json(response);
     });
 
+    app.get("/api/get-playlists-of-user", async (req, res) => {
+        if (req.query.userId === undefined) {
+            res.status(400).send();
+            return;
+        }
+
+        const playlists = db.collection("Playlists");
+
+        const playlistsFound = await playlists
+            .find({ UserID: req.query.userId })
+            .toArray();
+
+        if (playlistsFound === null) {
+            res.status(404).send();
+            return;
+        }
+
+        res.status(200).json(playlistsFound);
+    });
+
     app.get("/api/get-song-data", async (req, res) => {
         if (req.query.songId === undefined) {
             res.status(400).send();

@@ -90,7 +90,7 @@
 
                 const playlistCont =
                     document.querySelector("#playlistContainer");
-                playlistCont.insertBefore(Navbar(), playlistCont.firstChild);
+                playlistCont.insertBefore(await Navbar(), playlistCont.firstChild);
                 document.body.appendChild(audioController());
             }
             getData();

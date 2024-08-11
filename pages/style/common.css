@@ -510,12 +510,19 @@ a:hover {
     cursor: pointer;
 }
 
+.navbar::-webkit-scrollbar{
+    display: none;
+}
+
 .navbar {
     width: 6%;
     height: 88%;
     background: black;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .navbar svg {
@@ -584,4 +591,11 @@ a:hover {
 .navbar .nav-group.library {
     flex-grow: 1;
     border-radius: 10px;
+}
+
+.library img {
+    margin: auto auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    width: 100%;
 }

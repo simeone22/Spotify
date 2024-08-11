@@ -21,7 +21,7 @@ const searchIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>';
 const stackIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122" /></svg>';
-const noteIcon = 
+const noteIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" /></svg>';
 
 let audioPlayer = getAudioPlayer();
@@ -59,7 +59,8 @@ function getAudioPlayer() {
         );
     } else {
         data = JSON.parse(data);
-        if(data.src !== '') audioPlayer.src = data.src;
+        if (data.src === '') audioPlayer.removeAttribute('src');
+        else audioPlayer.src = data.src;
         audioPlayer.currentTime = data.currentTime;
         audioPlayer.loop = data.loop;
         audioPlayer.volume = data.volume;
@@ -67,7 +68,7 @@ function getAudioPlayer() {
         audioPlayer.onended = () => {
             let data = localStorage.getItem("tracks");
             if (data === null) {
-                audioPlayer.src = "";
+                audioPlayer.removeAttribute('src');
                 return;
             }
             tracks = JSON.parse(data);
@@ -462,7 +463,7 @@ function audioController() {
     div.appendChild(divTit);
     const setSongInfo = async () => {
         const songId = audioPlayer.src.split("/").pop().split(".mp3")[0];
-        if(songId === '') return;
+        if (songId === '') return;
         let res = await fetch(`/api/get-song-data?songId=${songId}`);
         if (res.status === 404) {
             //TODO: error
@@ -513,7 +514,7 @@ function audioController() {
             audioPlayer.onended();
         } else {
             audioPlayer.currentTime = audioPlayer.duration;
-            audioPlayer.src = "";
+            audioPlayer.removeAttribute('src');
         }
     });
     controlsButtons.appendChild(btn);
@@ -539,7 +540,7 @@ function audioController() {
     btn.addEventListener("click", (e) => {
         let data = localStorage.getItem("tracks");
         if (data === null) {
-            audioPlayer.src = "";
+            audioPlayer.removeAttribute('src');
             return;
         }
         const tracks = JSON.parse(data);
@@ -661,7 +662,7 @@ function Navbar() {
     div.classList.add("nav-group");
     div.classList.add("library");
     let btn = document.createElement("button");
-    btn.addEventListener("click", () => {});
+    btn.addEventListener("click", () => { });
     btn.innerHTML = stackIcon;
     tooltip = document.createElement("span");
     tooltip.classList.add("tooltip");
@@ -766,13 +767,13 @@ function songCardCompact(
 
 async function SongsInfoCard() {
     let div = document.createElement("div");
+    if (audioPlayer.src === '') return div;
     div.classList.add("songcard");
     let group = document.createElement("div");
     group.classList.add("songcard-group");
     let tit = document.createElement("h4");
     let res = await fetch(
-        `/api/get-song-data?songId=${
-            audioPlayer.src.split("/").at(-1).split(".mp3")[0]
+        `/api/get-song-data?songId=${audioPlayer.src.split("/").at(-1).split(".mp3")[0]
         }`
     );
     if (res.status === 404) {
@@ -837,19 +838,25 @@ async function SongsInfoCard() {
     sp.removeChild(sp.lastChild);
     group.appendChild(sp);
     // TODO: User info
-    res = await fetch(`/api/get-user-data?userId=${songData.UserID}`);
-    if (res.status === 404) {
-        //TODO: error
-        return;
+    if (songData.publishers.length === 1) {
+        res = await fetch(`/api/get-user-data?userId=${songData.publishers[0].PublisherID}`);
+        if (res.status === 404) {
+            //TODO: error
+            return;
+        }
+        let userData = await res.json();
+        img = document.createElement("img");
+        img.src = `/media/images/users/${userData._id}.png`;
+        group.appendChild(img);
+        sTit = document.createElement("a");
+        sTit.href = `/user?id=${userData._id}`;
+        sTit.innerText = userData.Name;
+        group.appendChild(sTit);
+        let sp = document.createElement("span");
+        let x = 0;
+        sp.innerText = `Songs published: ${x}`;
+        group.appendChild(sp);
     }
-    let userData = await res.json();
-    img = document.createElement("img");
-    img.src = `/media/images/users/${userData._id}.png`;
-    group.appendChild(img);
-    sTit = document.createElement("a");
-    sTit.href = `/user?id=${userData._id}`;
-    sTit.innerText = userData.Name;
-    group.appendChild(sTit);
     div.appendChild(group);
     if (nextTrack !== null) {
         group = document.createElement("div");

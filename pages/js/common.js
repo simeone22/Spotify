@@ -59,7 +59,7 @@ function getAudioPlayer() {
         );
     } else {
         data = JSON.parse(data);
-        audioPlayer.src = data.src;
+        if(data.src !== '') audioPlayer.src = data.src;
         audioPlayer.currentTime = data.currentTime;
         audioPlayer.loop = data.loop;
         audioPlayer.volume = data.volume;
@@ -462,6 +462,7 @@ function audioController() {
     div.appendChild(divTit);
     const setSongInfo = async () => {
         const songId = audioPlayer.src.split("/").pop().split(".mp3")[0];
+        if(songId === '') return;
         let res = await fetch(`/api/get-song-data?songId=${songId}`);
         if (res.status === 404) {
             //TODO: error
@@ -836,6 +837,19 @@ async function SongsInfoCard() {
     sp.removeChild(sp.lastChild);
     group.appendChild(sp);
     // TODO: User info
+    res = await fetch(`/api/get-user-data?userId=${songData.UserID}`);
+    if (res.status === 404) {
+        //TODO: error
+        return;
+    }
+    let userData = await res.json();
+    img = document.createElement("img");
+    img.src = `/media/images/users/${userData._id}.png`;
+    group.appendChild(img);
+    sTit = document.createElement("a");
+    sTit.href = `/user?id=${userData._id}`;
+    sTit.innerText = userData.Name;
+    group.appendChild(sTit);
     div.appendChild(group);
     if (nextTrack !== null) {
         group = document.createElement("div");

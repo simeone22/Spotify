@@ -4,33 +4,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Register</title>
-
-    <script>
-        function showPsw() {
-            var x = document.getElementById("psw");
-            if (x.type === "password") {
-                x.type = "text";
-            } else {
-                x.type = "password";
-            }
-        }
-    </script>
-
+    <title>Register - Spotify</title>
+    <link rel="stylesheet" href="style/common.css" />
 </head>
 
 <body>
-    <h1>Registrati</h1>
-    <input type="text" id="name" placeholder="Nome" required><br>
-    <input type="text" id="surname" placeholder="Cognome" required><br>
-    <input type="date" id="dateOfBirth" placeholder="Data di nascita" required><br>
-    <input type="email" id="email" placeholder="Email" required><br>
-    <input type="password" id="psw" placeholder="Password" required>
-    <input type="checkbox" onclick="showPsw()"> Mostra passowrd <br>
-    Sei un creatore? <input type="checkbox" id="areuPublisher"> <br>
-    <button type="button" id="confirmReg">Avanti</button>
+    <div class="div1">
+        <img src="/media/images/logo.png" alt="logo" id="logo"> <br>
+        <h1 id="titolo1">Sign in to Spotify</h1>
+        <hr>
+        <div class="data">
+            <div class="registermail">
+                <p style="color:white;"><b>Email address</b></p>
+                <input type="email" id="identifier" placeholder="name@domain.com" required>
+            </div>
+            <div class="data2">
+                <p style="color:white;"><b>Password</b></p>
+                <input type="password" id="password" placeholder="Password">
+                <button id="toggle-password">
+                    <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
+                </button>
+            </div>
+            <div class="data3">
+                <p style="color:white;"><b>Name</b></p>
+                <h2>This name will be displayed on your profile</h2>
+                <input type="text" id="name" required>
+            </div>
+            <div class="data4">
+                <p style="color:white;"><b>Date of birth</b></p>
+                <input type="number" id="year" placeholder="yyyy" min="1900" max="2024" required>
+                <select name="months" id="months">
+                    <option value="" disabled selected>Month</option>
+                    <option value="january">January</option>
+                    <option value="february">February</option>
+                    <option value="march">March</option>
+                    <option value="april">April</option>
+                    <option value="may">May</option>
+                    <option value="june">June</option>
+                    <option value="july">July</option>
+                    <option value="august">August</option>
+                    <option value="september">September</option>
+                    <option value="october">October</option>
+                    <option value="november">November</option>
+                    <option value="december">December</option>
+                </select>
+                <input type="number" id="day" placeholder="dd" min="1" max="31" required> <br></br>
+            </div>
+        </div>
+        <button type="button" id="save"><strong>Save</strong></button> <br>
+    </div>
 
+    <script>
+        document.getElementById('toggle-password').addEventListener('click', function () {
+            var x = document.getElementById("password");
+            var eyeIcon = document.getElementById("eye-icon");
+
+            if (x.type === "password") {
+                x.type = "text";
+                eyeIcon.src = '/media/images/eye2.png';
+            } else {
+                x.type = "password";
+                eyeIcon.src = '/media/images/eye1.png';
+            }
+        });
+
+        document.getElementById('save').addEventListener('click', async function () {
+            const email = document.getElementById('identifier').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+
+            const year = document.getElementById('year').value;
+            const month = document.getElementById('months').value;
+            const day = document.getElementById('day').value;
+
+            const date = `${year}-${("0" + (new Date(`${month} 1, 2020`).getMonth() + 1)).slice(-2)}-${("0" + day).slice(-2)}`;
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password, name, date })
+            });
+
+            const result = await response.text();
+            alert(result);
+
+        });
+
+    </script>
 </body>
 
 </html>

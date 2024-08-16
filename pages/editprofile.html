@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Spotify</title>
+</head>
+
+<body>
+    <form id="edit-profile-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="" required>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="" required>
+
+        <label for="date">Date of Birth:</label>
+        <input type="date" id="date" name="date" value="" required>
+
+        <button type="submit">Save Changes</button>
+    </form>
+    <script>
+        fetch('/profile')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('email').value = data.email;
+                document.getElementById('name').value = data.name;
+                document.getElementById('date').value = data.date;
+            })
+            .catch(error => {
+                console.error('Failed to retrieve user data:', error);
+                alert('Failed to retrieve user data.');
+            });
+
+        document.getElementById('edit-profile-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const updatedData = {
+                email: document.getElementById('email').value,
+                name: document.getElementById('name').value,
+                date: document.getElementById('date').value
+            };
+
+            fetch('/update-profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Profile updated successfully.');
+                    } else {
+                        alert('Failed to update profile.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating profile:', error);
+                    alert('Error updating profile.');
+                });
+        });
+    </script>
+</body>
+
+</html>

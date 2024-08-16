@@ -84,6 +84,35 @@ export default function routes(db) {
         }
     });
 
+    app.post('/update-profile', async (req, res) => {
+        if (!req.session.user) {
+            res.status(401).send("Unauthorized");
+            return;
+        }
+    
+        const { email, name, date } = req.body;
+        const users = db.collection("Users");
+    
+        try {
+            const updatedUser = await users.updateOne(
+                { email: req.session.user.email },
+                { $set: { email, name, date } }
+            );
+    
+            if (updatedUser.matchedCount > 0) {
+                req.session.user.email = email;
+                req.session.user.name = name;
+                req.session.user.date = date;
+                res.status(200).send("Profile updated successfully.");
+            } else {
+                res.status(500).send("Error updating profile.");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            res.status(500).send("Error updating profile.");
+        }
+    });
+
     app.get("/*", (req, res) => {
         let fPath = `${process.cwd()}/pages/${req.path}`;
         if (!req.path.includes(".")) fPath += ".html";

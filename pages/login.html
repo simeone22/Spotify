@@ -69,19 +69,7 @@
                     const profileResponse = await fetch('/profile');
                     if (profileResponse.ok) {
                         const userData = await profileResponse.json();
-
-                        const resultWindow = window.open('', '_blank', 'width=600,height=400');
-                        resultWindow.document.write(`
-                        <html>
-                        <head><title>User Info</title></head>
-                        <body style="font-family: Arial, sans-serif;">
-                            <h1>User Information</h1>
-                            <p><strong>Email:</strong> ${userData.email}</p>
-                            <p><strong>Name:</strong> ${userData.name}</p>
-                            <p><strong>Date of Birth:</strong> ${userData.date}</p>
-                        </body>
-                        </html>
-                    `);
+                        const resultWindow = window.open('editprofile.html');
                         resultWindow.document.close();
                     } else {
                         alert('Failed to retrieve user data.');

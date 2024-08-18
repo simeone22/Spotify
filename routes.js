@@ -84,21 +84,21 @@ export default function routes(db) {
         }
     });
 
-    app.post('/update-profile', async (req, res) => {
+    app.post('/updateprofile', async (req, res) => {
         if (!req.session.user) {
             res.status(401).send("Unauthorized");
             return;
         }
-    
+
         const { email, name, date } = req.body;
         const users = db.collection("Users");
-    
+
         try {
             const updatedUser = await users.updateOne(
                 { email: req.session.user.email },
                 { $set: { email, name, date } }
             );
-    
+
             if (updatedUser.matchedCount > 0) {
                 req.session.user.email = email;
                 req.session.user.name = name;
@@ -110,6 +110,34 @@ export default function routes(db) {
         } catch (error) {
             console.error("Error updating profile:", error);
             res.status(500).send("Error updating profile.");
+        }
+    });
+
+    app.post('/deleteprofile', async (req, res) => {
+        if (!req.session.user) {
+            res.status(401).send("Unauthorized");
+            return;
+        }
+        const users = db.collection("Users");
+
+        try {
+            const deleteResult = await users.deleteOne({ email: req.session.user.email });
+
+            if (deleteResult.deletedCount > 0) {
+                req.session.destroy(err => {
+                    if (err) {
+                        console.error("Error destroying session:", err);
+                        res.status(500).send("Error deleting profile.");
+                    } else {
+                        res.status(200).send("Profile deleted successfully.");
+                    }
+                });
+            } else {
+                res.status(500).send("Error deleting profile.");
+            }
+        } catch (error) {
+            console.error("Error deleting profile:", error);
+            res.status(500).send("Error deleting profile.");
         }
     });
 

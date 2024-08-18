@@ -19,6 +19,7 @@
         <input type="date" id="date" name="date" value="" required>
 
         <button type="submit">Save Changes</button>
+        <button type="submit" id="deletebutton">Delete account</button>
     </form>
     <script>
         fetch('/profile')
@@ -33,8 +34,7 @@
                 alert('Failed to retrieve user data.');
             });
 
-        document.getElementById('edit-profile-form').addEventListener('submit', function (e) {
-            e.preventDefault();
+        document.getElementById('edit-profile-form').addEventListener('submit', function () {
 
             const updatedData = {
                 email: document.getElementById('email').value,
@@ -42,7 +42,7 @@
                 date: document.getElementById('date').value
             };
 
-            fetch('/update-profile', {
+            fetch('/updateprofile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -61,6 +61,22 @@
                     alert('Error updating profile.');
                 });
         });
+
+        document.getElementById('deletebutton').addEventListener('click', function () {
+            if (confirm("Are you sure you want to delete your profile?")) {
+                fetch('/deleteprofile', {
+                    method: 'POST',
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("Profile deleted successfully.");
+                        } else {
+                            alert("Failed to delete profile.");
+                        }
+                    });
+            }
+        });
+
     </script>
 </body>
 

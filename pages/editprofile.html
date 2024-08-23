@@ -5,23 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Spotify</title>
+    <link rel="stylesheet" href="style/common.css" />
 </head>
 
 <body>
-    <form id="edit-profile-form">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="" required>
-
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="" required>
-
-        <label for="date">Date of Birth:</label>
-        <input type="date" id="date" name="date" value="" required>
-
-        <button type="submit">Save Changes</button>
+    <div class="div1">
+        <img src="/media/images/logo.png" alt="logo" id="logo"> <br>
+        <div class="title-container">
+            <h1 id="titolo1">Edit profile</h1>
+        </div>
+        <div class="data">
+            <div class="data1">
+                <p style="color:white;"><b>Email: </b></p>
+                <input type="email" id="identifier" value="" required>
+            </div>
+            <div class="data2">
+                <p style="color:white;"><b>Password: </b></p>
+                <input type="password" id="password" value="" required>
+                <button id="toggle-password">
+                    <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
+                </button>
+            </div>
+            <div class="data3">
+                <p style="color:white;"><b>Name: </b></p>
+                <input type="text" id="name" value="" required>
+            </div>
+            <div class="data4">
+                <p style="color:white;"><b>Date of birth: </b></p>
+                <input type="date" id="date" value="" required> <br>
+            </div>
+        </div>
+        <button type="submit" id="save">Save Changes</button> <br>
         <button type="submit" id="deletebutton">Delete account</button>
-    </form>
+    </div>
     <script>
+        document.getElementById('toggle-password').addEventListener('click', function () {
+            var x = document.getElementById("password");
+            var eyeIcon = document.getElementById("eye-icon");
+
+            if (x.type === "password") {
+                x.type = "text";
+                eyeIcon.src = '/media/images/eye2.png';
+            } else {
+                x.type = "password";
+                eyeIcon.src = '/media/images/eye1.png';
+            }
+        });
+
         fetch('/profile')
             .then(response => response.json())
             .then(data => {

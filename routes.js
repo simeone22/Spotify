@@ -2,6 +2,19 @@ import express from 'express';
 import session from 'express-session';
 import crypto from 'crypto';
 import fs from 'fs';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const transporter = nodemailer.createTransport({
+    host: process.env.MAILTRAP_HOST,
+    port: process.env.MAILTRAP_PORT,
+    auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS,
+    }
+});
 
 export default function routes(db) {
     const app = express();
@@ -34,6 +47,21 @@ export default function routes(db) {
             const insertResult = await users.insertOne({ email, password: hashedPassword, name, date });
 
             if (insertResult.acknowledged) {
+                const mailOptions = {
+                    from: '"Test" <test@example.com>',
+                    to: 'recipient@example.com', 
+                    subject: 'Welcome to Spotify!',
+                    text: `Hi ${name},\n\nThank you for registering on Spotify! We're excited to have you on board.\n\nBest regards,\nSpotify Team`
+                };
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.error("Error sending email:", error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+
                 res.status(200).send("User registered successfully.");
             } else {
                 res.status(500).send("Error registering user.");

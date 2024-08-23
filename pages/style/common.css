@@ -99,7 +99,8 @@ p {
 #name,
 #year,
 #months,
-#day {
+#day,
+#date {
     color: white;
     background-color: rgba(0, 0, 0, 0);
     padding: 16px;
@@ -238,7 +239,8 @@ input:checked+.slider:before {
 }
 
 #login,
-#save {
+#save,
+#deletebutton {
     font-family: "Archivo Black", sans-serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     font-size: 1rem;
@@ -259,7 +261,8 @@ input:checked+.slider:before {
 }
 
 #login:hover,
-#save:hover {
+#save:hover,
+#deletebutton:hover {
     transform: scale(1.05);
 }
 

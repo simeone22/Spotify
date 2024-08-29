@@ -10,37 +10,50 @@
 
 <body>
     <div class="div1">
+        <img id="profilepicture" src="/path/to/profilepicture.jpg">
         <img src="/media/images/logo.png" alt="logo" id="logo"> <br>
-        <div class="title-container">
-            <h1 id="titolo1">Edit profile</h1>
-        </div>
-        <div class="data">
-            <div class="data1">
-                <p style="color:white;"><b>Email: </b></p>
-                <input type="email" id="identifier" value="" required>
+        <div class="content-container">
+            <div class="title-container">
+                <h1 id="titolo1">Edit profile</h1>
             </div>
-            <div class="data2">
-                <p style="color:white;"><b>Password: </b></p>
-                <input type="password" id="password" value="" required>
-                <button id="toggle-password">
-                    <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
-                </button>
-            </div>
-            <div class="data3">
-                <p style="color:white;"><b>Name: </b></p>
-                <input type="text" id="name" value="" required>
-            </div>
-            <div class="data4">
-                <p style="color:white;"><b>Date of birth: </b></p>
-                <input type="date" id="date" value="" required> <br>
+            <div class="data">
+                <div class="data1">
+                    <p style="color:white;"><b>Email address: </b></p>
+                    <input type="email" id="Email" value="" required>
+                </div>
+                <div class="data2">
+                    <p style="color:white;"><b>Password: </b></p>
+                    <input type="password" id="Password" value="" required>
+                    <button id="toggle-password">
+                        <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
+                    </button>
+                </div>
+                <div class="data3">
+                    <p style="color:white;"><b>Name: </b></p>
+                    <input type="text" id="Name" value="" required>
+                </div>
+                <div class="data4">
+                    <p style="color:white;"><b>Date of birth: </b></p>
+                    <input type="date" id="DateOfBirth" value="" required> <br>
+                </div>
+                <input type="file" id="fileinput" style="display: none;" accept="image/*">
+                <div class="publishercheck">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <p class="publisher-label"><b>Publisher account</b></p>
+                </div>
             </div>
         </div>
         <button type="submit" id="save">Save Changes</button> <br>
         <button type="submit" id="deletebutton">Delete account</button>
     </div>
     <script>
+
+        // Toggle password visibility
         document.getElementById('toggle-password').addEventListener('click', function () {
-            var x = document.getElementById("password");
+            var x = document.getElementById("Password");
             var eyeIcon = document.getElementById("eye-icon");
 
             if (x.type === "password") {
@@ -52,32 +65,93 @@
             }
         });
 
-        fetch('/profile')
+        // Load user data
+        fetch('/api/profile')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('email').value = data.email;
-                document.getElementById('name').value = data.name;
-                document.getElementById('date').value = data.date;
+                document.getElementById('Email').value = data.email;
+                document.getElementById('Name').value = data.name;
+                document.getElementById('DateOfBirth').value = data.date;
+                const profilePicture = data.profilePicture ? `/uploads/${data.profilePicture}` : '/path/to/default/image.jpg';
+                document.getElementById('profilepicture').src = profilePicture;
             })
             .catch(error => {
                 console.error('Failed to retrieve user data:', error);
                 alert('Failed to retrieve user data.');
             });
 
-        document.getElementById('edit-profile-form').addEventListener('submit', function () {
+        // Update profile picture on click
+        document.getElementById('profilepicture').addEventListener('click', function () {
+            document.getElementById('fileinput').click();
+        });
 
-            const updatedData = {
-                email: document.getElementById('email').value,
-                name: document.getElementById('name').value,
-                date: document.getElementById('date').value
-            };
+        document.getElementById('fileinput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profilepicture').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
 
-            fetch('/updateprofile', {
+        function isValidEmail(email) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailPattern.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function isValidDate(dob) {
+            const today = new Date();
+            const birthDate = new Date(dob);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age >= 13;
+        }
+
+        // Save profile changes
+        document.getElementById('save').addEventListener('click', function () {
+            const email = document.getElementById('Email').value;
+            const password = document.getElementById('Password').value;
+            const dob = document.getElementById('DateOfBirth').value;
+
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            if (password && !validatePassword(password)) {
+                alert('Password must be at least 8 characters long.');
+                return;
+            }
+
+            if (!isValidDate(dob)) {
+                alert('Invalid date. Please enter a valid date.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('email', document.getElementById('Email').value);
+            formData.append('name', document.getElementById('Name').value);
+            formData.append('password', document.getElementById('Password').value);
+            formData.append('date', document.getElementById('DateOfBirth').value);
+
+            const fileInput = document.getElementById('fileinput');
+            if (fileInput.files.length > 0) {
+                formData.append('profilepicture', fileInput.files[0]);
+            }
+
+            fetch('/api/profile', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedData)
+                body: formData
             })
                 .then(response => {
                     if (response.ok) {
@@ -90,12 +164,14 @@
                     console.error('Error updating profile:', error);
                     alert('Error updating profile.');
                 });
+
         });
 
+        // Delete profile
         document.getElementById('deletebutton').addEventListener('click', function () {
             if (confirm("Are you sure you want to delete your profile?")) {
-                fetch('/deleteprofile', {
-                    method: 'POST',
+                fetch('/api/profile', {
+                    method: 'DELETE',
                 })
                     .then(response => {
                         if (response.ok) {

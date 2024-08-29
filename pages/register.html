@@ -15,23 +15,23 @@
         <hr>
         <div class="data">
             <div class="registermail">
-                <p style="color:white;"><b>Email address</b></p>
-                <input type="email" id="identifier" placeholder="name@domain.com" required>
+                <p style="color:white;"><b>Email address:</b></p>
+                <input type="email" id="Email" placeholder="name@domain.com" required>
             </div>
             <div class="data2">
-                <p style="color:white;"><b>Password</b></p>
-                <input type="password" id="password" placeholder="Password" required>
+                <p style="color:white;"><b>Password:</b></p>
+                <input type="password" id="Password" placeholder="Password" required>
                 <button id="toggle-password">
                     <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
                 </button>
             </div>
             <div class="data3">
-                <p style="color:white;"><b>Name</b></p>
+                <p style="color:white;"><b>Name:</b></p>
                 <h2>This name will be displayed on your profile</h2>
-                <input type="text" id="name" required>
+                <input type="text" id="Name" required>
             </div>
             <div class="data4">
-                <p style="color:white;"><b>Date of birth</b></p>
+                <p style="color:white;"><b>Date of birth:</b></p>
                 <input type="number" id="year" placeholder="yyyy" min="1900" max="2024" required>
                 <select name="months" id="months" required>
                     <option value="" disabled selected>Month</option>
@@ -90,7 +90,7 @@
         }
 
         document.getElementById('toggle-password').addEventListener('click', function () {
-            var x = document.getElementById("password");
+            var x = document.getElementById("Password");
             var eyeIcon = document.getElementById("eye-icon");
 
             if (x.type === "password") {
@@ -103,9 +103,9 @@
         });
 
         document.getElementById('save').addEventListener('click', async function () {
-            const email = document.getElementById('identifier').value;
-            const password = document.getElementById('password').value;
-            const name = document.getElementById('name').value;
+            const email = document.getElementById('Email').value;
+            const password = document.getElementById('Password').value;
+            const name = document.getElementById('Name').value;
 
             const year = document.getElementById('year').value;
             const month = document.getElementById('months').value;
@@ -128,7 +128,7 @@
                 return;
             }
 
-            const response = await fetch('/register', {
+            const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

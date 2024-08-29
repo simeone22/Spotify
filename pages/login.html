@@ -18,12 +18,12 @@
         <hr>
         <div class="data">
             <div class="data1">
-                <p style="color:white;"><b>Email address or username</b></p>
-                <input type="text" id="identifier" placeholder="Email address or username">
+                <p style="color:white;"><b>Email address:</b></p>
+                <input type="text" id="Email" placeholder="Email address or username">
             </div>
             <div class="data2">
-                <p style="color:white;"><b>Password</b></p>
-                <input type="password" id="password" placeholder="Password">
+                <p style="color:white;"><b>Password:</b></p>
+                <input type="password" id="Password" placeholder="Password">
                 <button id="toggle-password">
                     <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
                 </button>
@@ -41,7 +41,7 @@
 
         <script>
             document.getElementById('toggle-password').addEventListener('click', function () {
-                var x = document.getElementById("password");
+                var x = document.getElementById("Password");
                 var eyeIcon = document.getElementById("eye-icon");
 
                 if (x.type === "password") {
@@ -54,10 +54,10 @@
             });
 
             document.getElementById('login').addEventListener('click', async function () {
-                const email = document.getElementById('identifier').value;
-                const password = document.getElementById('password').value;
+                const email = document.getElementById('Email').value;
+                const password = document.getElementById('Password').value;
 
-                const response = await fetch('/login', {
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -66,7 +66,7 @@
                 });
 
                 if (response.ok) {
-                    const profileResponse = await fetch('/profile');
+                    const profileResponse = await fetch('/api/profile');
                     if (profileResponse.ok) {
                         const userData = await profileResponse.json();
                         const resultWindow = window.open('editprofile.html');
@@ -79,9 +79,6 @@
                     alert(result);
                 }
             });
-
-
-
         </script>
 </body>
 

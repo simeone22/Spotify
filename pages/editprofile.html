@@ -39,7 +39,7 @@
                 <input type="file" id="fileinput" style="display: none;" accept="image/*">
                 <div class="publishercheck">
                     <label class="switch">
-                        <input type="checkbox">
+                        <input type="checkbox" id="IsPublisher">
                         <span class="slider round"></span>
                     </label>
                     <p class="publisher-label"><b>Publisher account</b></p>
@@ -74,6 +74,7 @@
                 document.getElementById('DateOfBirth').value = data.date;
                 const profilePicture = data.profilePicture ? `/uploads/${data.profilePicture}` : '/path/to/default/image.jpg';
                 document.getElementById('profilepicture').src = profilePicture;
+                document.getElementById('IsPublisher').checked = data.ispublisher;
             })
             .catch(error => {
                 console.error('Failed to retrieve user data:', error);
@@ -122,6 +123,7 @@
             const email = document.getElementById('Email').value;
             const password = document.getElementById('Password').value;
             const dob = document.getElementById('DateOfBirth').value;
+            const ispublisher = document.getElementById('IsPublisher').checked;
 
             if (!isValidEmail(email)) {
                 alert('Please enter a valid email address.');
@@ -143,6 +145,7 @@
             formData.append('name', document.getElementById('Name').value);
             formData.append('password', document.getElementById('Password').value);
             formData.append('date', document.getElementById('DateOfBirth').value);
+            formData.append('ispublisher', document.getElementById('IsPublisher').checked);
 
             const fileInput = document.getElementById('fileinput');
             if (fileInput.files.length > 0) {

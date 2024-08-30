@@ -95,14 +95,15 @@ export default function routes(db) {
             return;
         }
 
-        const { email, name, password, date } = req.body;
+        const { email, name, password, date, ispublisher } = req.body;
         const profilePicture = req.file ? req.file.filename : null;
         const users = db.collection("Users");
-
+        const IsPublisherBool = ispublisher === 'true';
         const updateData = {
             email,
             name,
             date,
+            ispublisher: IsPublisherBool,
             ...(password && { password: hashPassword(password) }),
             ...(profilePicture && { profilePicture })
         };
@@ -118,6 +119,7 @@ export default function routes(db) {
                 req.session.user.name = name;
                 req.session.user.date = date;
                 req.session.user.profilePicture = profilePicture;
+                req.session.user.ispublisher = IsPublisherBool;
 
                 res.status(200).send("Profile updated successfully.");
             } else {

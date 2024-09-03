@@ -30,7 +30,7 @@
             </div>
             <div class="remember-me-container">
                 <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" id="RememberMe">
                     <span class="slider round"></span>
                 </label>
                 <p><b>⠀Remember me</b></p>
@@ -56,6 +56,7 @@
             document.getElementById('login').addEventListener('click', async function () {
                 const email = document.getElementById('Email').value;
                 const password = document.getElementById('Password').value;
+                const rememberMe = document.getElementById('RememberMe').checked;
 
                 const response = await fetch('/api/login', {
                     method: 'POST',

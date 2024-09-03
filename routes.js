@@ -6,8 +6,11 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import cookieParser from 'cookie-parser';
+import bcrypt from 'bcrypt';
 
-dotenv.config();
+dotenv.config(); //for .env file
 
 // multer config
 const storage = multer.diskStorage({
@@ -39,7 +42,7 @@ export default function routes(db) {
         saveUninitialized: false,
         cookie: { secure: false }
     }));
-
+    app.use(cookieParser());
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
@@ -136,7 +139,7 @@ export default function routes(db) {
             return;
         }
 
-        const { email, password } = req.body;
+        const { email, password, rememberMe } = req.body;
         const users = db.collection("Users");
 
         try {
@@ -146,6 +149,17 @@ export default function routes(db) {
                 res.status(401).send("Invalid email or password.");
                 return;
             }
+            //token generation
+            const token = uuidv4();
+            const creationDate = new Date();
+            //insert token i tokens table
+            const tokens = db.collection("Tokens");
+            await tokens.insertOne({ userId: user._id, token, creationDate });
+            const cookieOptions = { httpOnly: true, secure: false };
+            if (rememberMe) {
+                cookieOptions.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+            }
+            res.cookie('authToken', token, cookieOptions);
             req.session.user = { email: user.email, name: user.name, date: user.date };
             res.status(200).send("Login successful.");
         } catch (error) {

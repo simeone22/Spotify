@@ -49,19 +49,23 @@ export default function routes(db) {
         return crypto.createHash('sha256').update(password).digest('hex').toUpperCase();
     }
 
-    app.post('/api/register', upload.single('profilepicture'), async (req, res) => {
+    app.post('/api/register', async (req, res) => {
         if (!req.body.email || !req.body.password || !req.body.name || !req.body.date) {
             res.status(400).send("Email, password, name, and date are required.");
             return;
         }
 
         const { email, password, name, date } = req.body;
-        const profilePicture = req.file ? req.file.filename : null;
         const users = db.collection("Users");
 
         try {
+            const existingUser = await users.findOne({ email: email });
+            if (existingUser) {
+                return res.status(400).send("Email is already in use.");
+            }
+
             const hashedPassword = hashPassword(password);
-            const insertResult = await users.insertOne({ email, password: hashedPassword, name, date, profilePicture });
+            const insertResult = await users.insertOne({ email, password: hashedPassword, name, date });
 
             if (insertResult.acknowledged) {
                 const mailOptions = {
@@ -89,45 +93,40 @@ export default function routes(db) {
         }
     });
 
-    app.post('/api/profile', upload.single('profilepicture'), async (req, res) => {
+    app.post('/api/profile', async (req, res) => {
         if (!req.session.user) {
-            res.status(401).send("Unauthorized");
-            return;
+            return res.status(401).send('Unauthorized');
         }
 
         const { email, name, password, date, ispublisher } = req.body;
-        const profilePicture = req.file ? req.file.filename : null;
-        const users = db.collection("Users");
-        const IsPublisherBool = ispublisher === 'true';
-        const updateData = {
-            email,
-            name,
-            date,
-            ispublisher: IsPublisherBool,
-            ...(password && { password: hashPassword(password) }),
-            ...(profilePicture && { profilePicture })
-        };
 
         try {
-            const updatedUser = await users.updateOne(
+            const users = db.collection('Users');
+            const updateData = {
+                email,
+                name,
+                date,
+                ispublisher
+            };
+
+            if (password) {
+                const hashedPassword = await bcrypt.hash(password, 10);
+                updateData.password = hashedPassword;
+            }
+
+            const updateResult = await users.updateOne(
                 { email: req.session.user.email },
                 { $set: updateData }
             );
 
-            if (updatedUser.matchedCount > 0) {
-                req.session.user.email = email;
-                req.session.user.name = name;
-                req.session.user.date = date;
-                req.session.user.profilePicture = profilePicture;
-                req.session.user.ispublisher = IsPublisherBool;
-
-                res.status(200).send("Profile updated successfully.");
+            if (updateResult.matchedCount > 0) {
+                res.sendStatus(200);
             } else {
-                res.status(500).send("Error updating profile.");
+                res.status(500).send('Failed to update profile.');
             }
         } catch (error) {
-            console.error("Error updating profile:", error);
-            res.status(500).send("Error updating profile.");
+            console.error('Error updating profile:', error);
+            res.status(500).send('Error updating profile.');
         }
     });
 
@@ -147,7 +146,7 @@ export default function routes(db) {
                 res.status(401).send("Invalid email or password.");
                 return;
             }
-            req.session.user = { email: user.email, name: user.name, date: user.date, profilePicture: user.profilePicture };
+            req.session.user = { email: user.email, name: user.name, date: user.date };
             res.status(200).send("Login successful.");
         } catch (error) {
             console.error("Error logging in user:", error);
@@ -155,12 +154,37 @@ export default function routes(db) {
         }
     });
 
-    app.get('/api/profile', (req, res) => {
+    app.get('/api/profile', async (req, res) => {
         if (req.session.user) {
-            res.status(200).json(req.session.user);
+            const users = db.collection("Users");
+            const user = await users.findOne({ email: req.session.user.email });
+
+            if (user) {
+                res.status(200).json({
+                    email: user.email,
+                    name: user.name,
+                    date: user.date,
+                    ispublisher: user.ispublisher,
+                    profilepicture: req.session.user.profilepicture || 'default.jpg'
+                });
+            } else {
+                res.status(404).send("User not found");
+            }
         } else {
             res.status(401).send("Unauthorized");
         }
+    });
+
+    app.post('/api/profile/picture', upload.single('profilePicture'), (req, res) => {
+        if (!req.session.user) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+        req.session.user.profilePicture = req.file.filename;
+
+        res.status(200).json({ fileName: req.file.filename });
     });
 
     app.delete('/api/profile', async (req, res) => {

@@ -19,27 +19,27 @@
             <div class="data">
                 <div class="data1">
                     <p style="color:white;"><b>Email address: </b></p>
-                    <input type="email" id="Email" required>
+                    <input type="email" id="Email" name="Email" required>
                 </div>
                 <div class="data2">
                     <p style="color:white;"><b>Password: </b></p>
-                    <input type="password" id="Password">
+                    <input type="password" id="Password" name="Password">
                     <button id="toggle-password">
                         <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
                     </button>
                 </div>
                 <div class="data3">
                     <p style="color:white;"><b>Name: </b></p>
-                    <input type="text" id="Name" required>
+                    <input type="text" id="Name" name="Name" required>
                 </div>
                 <div class="data4">
                     <p style="color:white;"><b>Date of birth: </b></p>
-                    <input type="date" id="DateOfBirth" required>
+                    <input type="date" id="DateOfBirth" name="DateOfBirth" required>
                 </div>
                 <input type="file" id="fileinput" style="display: none;" accept="image/*">
                 <div class="publishercheck">
                     <label class="switch">
-                        <input type="checkbox" id="IsPublisher">
+                        <input type="checkbox" id="IsPublisher" name="IsPublisher">
                         <span class="slider round"></span>
                     </label>
                     <p class="publisher-label"><b>Publisher account</b></p>
@@ -49,6 +49,7 @@
         <button type="button" id="save">Save Changes</button> <br>
         <button type="button" id="deletebutton">Delete account</button>
     </div>
+
     <script>
         // Toggle password visibility
         document.getElementById('toggle-password').addEventListener('click', function () {
@@ -68,10 +69,10 @@
         fetch('/api/profile')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('Email').value = data.email;
-                document.getElementById('Name').value = data.name;
-                document.getElementById('DateOfBirth').value = data.date;
-                document.getElementById('IsPublisher').checked = data.ispublisher;
+                document.getElementById('Email').value = data.Email;
+                document.getElementById('Name').value = data.Name;
+                document.getElementById('DateOfBirth').value = data.DateOfBirth;
+                document.getElementById('IsPublisher').checked = data.IsPublisher;
                 // Set profile picture
                 const profilePic = document.getElementById('profilepicture');
                 profilePic.src = `/uploads/${data.profilepicture}`;
@@ -111,18 +112,18 @@
             }
         });
 
-        function isValidEmail(email) {
+        function isValidEmail(Email) {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailPattern.test(email);
+            return emailPattern.test(Email);
         }
 
-        function validatePassword(password) {
-            return password.length >= 8 || password === '';
+        function validatePassword(Password) {
+            return Password.length >= 8 || Password === '';
         }
 
-        function isValidDate(dob) {
+        function isValidDate(DateOfBirth) {
             const today = new Date();
-            const birthDate = new Date(dob);
+            const birthDate = new Date(DateOfBirth);
             let age = today.getFullYear() - birthDate.getFullYear();
             const monthDifference = today.getMonth() - birthDate.getMonth();
 
@@ -134,32 +135,32 @@
 
         // Save profile changes
         document.getElementById('save').addEventListener('click', function () {
-            const email = document.getElementById('Email').value;
-            const password = document.getElementById('Password').value;
-            const dob = document.getElementById('DateOfBirth').value;
-            const ispublisher = document.getElementById('IsPublisher').checked;
+            const Email = document.getElementById('Email').value;
+            const Password = document.getElementById('Password').value;
+            const DateOfBirth = document.getElementById('DateOfBirth').value;
+            const IsPublisher = document.getElementById('IsPublisher').checked;
 
-            if (!isValidEmail(email)) {
+            if (!isValidEmail(Email)) {
                 alert('Please enter a valid email address.');
                 return;
             }
 
-            if (!validatePassword(password)) {
+            if (!validatePassword(Password)) {
                 alert('Password must be at least 8 characters long or leave empty to keep current password.');
                 return;
             }
 
-            if (!isValidDate(dob)) {
+            if (!isValidDate(DateOfBirth)) {
                 alert('Invalid date. Please enter a valid date.');
                 return;
             }
 
             const data = {
-                email: email,
-                name: document.getElementById('Name').value,
-                password: password || undefined,
-                date: dob,
-                ispublisher: ispublisher
+                Email: Email,
+                Name: document.getElementById('Name').value,
+                Password: Password || undefined,
+                DateOfBirth: DateOfBirth,
+                IsPublisher: IsPublisher
             };
 
             fetch('/api/profile', {
@@ -167,7 +168,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data)  // Corretto: invia tutti i dati
             })
                 .then(response => {
                     if (response.ok) {

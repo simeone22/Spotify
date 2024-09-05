@@ -16,11 +16,11 @@
         <div class="data">
             <div class="registermail">
                 <p style="color:white;"><b>Email address:</b></p>
-                <input type="email" id="Email" placeholder="name@domain.com" required>
+                <input type="email" id="Email" name="Email" placeholder="name@domain.com" required>
             </div>
             <div class="data2">
                 <p style="color:white;"><b>Password:</b></p>
-                <input type="password" id="Password" placeholder="Password" required>
+                <input type="password" id="Password" name="Password" placeholder="Password" required>
                 <button id="toggle-password">
                     <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
                 </button>
@@ -28,12 +28,12 @@
             <div class="data3">
                 <p style="color:white;"><b>Name:</b></p>
                 <h2>This name will be displayed on your profile</h2>
-                <input type="text" id="Name" required>
+                <input type="text" id="Name" name="Name" required>
             </div>
             <div class="data4">
                 <p style="color:white;"><b>Date of birth:</b></p>
-                <input type="number" id="year" placeholder="yyyy" min="1900" max="2024" required>
-                <select name="months" id="months" required>
+                <input type="number" id="year" name="Year" placeholder="yyyy" min="1900" max="2024" required>
+                <select name="Month" id="months" required>
                     <option value="" disabled selected>Month</option>
                     <option value="1">January</option>
                     <option value="2">February</option>
@@ -48,20 +48,20 @@
                     <option value="11">November</option>
                     <option value="12">December</option>
                 </select>
-                <input type="number" id="day" placeholder="dd" min="1" max="31" required> <br></br>
+                <input type="number" id="day" name="Day" placeholder="dd" min="1" max="31" required> <br></br>
             </div>
         </div>
         <button type="button" id="save"><strong>Save</strong></button> <br>
     </div>
 
     <script>
-        function validateEmail(email) {
+        function validateEmail(Email) {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailPattern.test(email);
+            return emailPattern.test(Email);
         }
 
-        function validatePassword(password) {
-            return password.length >= 8;
+        function validatePassword(Password) {
+            return Password.length >= 8;
         }
 
         function isValidDate(year, month, day) {
@@ -73,7 +73,7 @@
                 return false;
             }
 
-            if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1900 || year > 2024) {
+            if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1900 || year > new Date().getFullYear()) {
                 return false;
             }
 
@@ -103,22 +103,22 @@
         });
 
         document.getElementById('save').addEventListener('click', async function () {
-            const email = document.getElementById('Email').value;
-            const password = document.getElementById('Password').value;
-            const name = document.getElementById('Name').value;
+            const Email = document.getElementById('Email').value;
+            const Password = document.getElementById('Password').value;
+            const Name = document.getElementById('Name').value;
 
             const year = document.getElementById('year').value;
             const month = document.getElementById('months').value;
             const day = document.getElementById('day').value;
 
-            const date = `${year}-${("0" + (new Date(`${month} 1, 2020`).getMonth() + 1)).slice(-2)}-${("0" + day).slice(-2)}`;
+            const DateOfBirth = `${year}-${("0" + month).slice(-2)}-${("0" + day).slice(-2)}`;
 
-            if (!validateEmail(email)) {
+            if (!validateEmail(Email)) {
                 alert('Please enter a valid email address.');
                 return;
             }
 
-            if (!validatePassword(password)) {
+            if (!validatePassword(Password)) {
                 alert('Password must be at least 8 characters long.');
                 return;
             }
@@ -133,7 +133,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password, name, date })
+                body: JSON.stringify({ Email, Password, Name, DateOfBirth })
             });
 
             const result = await response.text();

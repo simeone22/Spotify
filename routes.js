@@ -52,30 +52,31 @@ export default function routes(db) {
         return crypto.createHash('sha256').update(password).digest('hex').toUpperCase();
     }
 
+    //registration
     app.post('/api/register', async (req, res) => {
-        if (!req.body.email || !req.body.password || !req.body.name || !req.body.date) {
+        if (!req.body.Email || !req.body.Password || !req.body.Name || !req.body.DateOfBirth) {
             res.status(400).send("Email, password, name, and date are required.");
             return;
         }
 
-        const { email, password, name, date } = req.body;
+        const { Email, Password, Name, DateOfBirth } = req.body;
         const users = db.collection("Users");
 
         try {
-            const existingUser = await users.findOne({ email: email });
+            const existingUser = await users.findOne({ Email: Email });
             if (existingUser) {
                 return res.status(400).send("Email is already in use.");
             }
 
-            const hashedPassword = hashPassword(password);
-            const insertResult = await users.insertOne({ email, password: hashedPassword, name, date });
+            const hashedPassword = hashPassword(Password);
+            const insertResult = await users.insertOne({ Email, Password: hashedPassword, Name, DateOfBirth });
 
             if (insertResult.acknowledged) {
                 const mailOptions = {
                     from: '"Test" <test@example.com>',
                     to: 'recipient@example.com',
                     subject: 'Welcome to Spotify!',
-                    text: `Hi ${name},\n\nThank you for registering on Spotify! We're excited to have you on board.\n\nBest regards,\nSpotify Team`
+                    text: `Hi ${Name},\n\nThank you for registering on Spotify! We're excited to have you on board.\n\nBest regards,\nSpotify Team`
                 };
 
                 transporter.sendMail(mailOptions, (error, info) => {
@@ -96,29 +97,30 @@ export default function routes(db) {
         }
     });
 
+    //updating profile
     app.post('/api/profile', async (req, res) => {
         if (!req.session.user) {
             return res.status(401).send('Unauthorized');
         }
 
-        const { email, name, password, date, ispublisher } = req.body;
+        const { Email, Name, Password, DateOfBirth, IsPublisher } = req.body;
 
         try {
             const users = db.collection('Users');
             const updateData = {
-                email,
-                name,
-                date,
-                ispublisher
+                Email,
+                Name,
+                DateOfBirth,
+                IsPublisher
             };
 
-            if (password) {
-                const hashedPassword = await bcrypt.hash(password, 10);
-                updateData.password = hashedPassword;
+            if (Password) {
+                const hashedPassword = await bcrypt.hash(Password, 10);
+                updateData.Password = hashedPassword;
             }
 
             const updateResult = await users.updateOne(
-                { email: req.session.user.email },
+                { Email: req.session.user.Email },
                 { $set: updateData }
             );
 
@@ -133,34 +135,35 @@ export default function routes(db) {
         }
     });
 
+    //logging in
     app.post('/api/login', async (req, res) => {
-        if (!req.body.email || !req.body.password) {
+        if (!req.body.Email || !req.body.Password) {
             res.status(400).send("Email and password are required.");
             return;
         }
 
-        const { email, password, rememberMe } = req.body;
+        const { Email, Password, rememberMe } = req.body;
         const users = db.collection("Users");
 
         try {
-            const user = await users.findOne({ email, password: hashPassword(password) });
+            const user = await users.findOne({ Email, Password: hashPassword(Password) });
 
             if (!user) {
                 res.status(401).send("Invalid email or password.");
                 return;
             }
             //token generation
-            const token = uuidv4();
-            const creationDate = new Date();
+            const Token = uuidv4();
+            const CreationDate = new Date();
             //insert token i tokens table
             const tokens = db.collection("Tokens");
-            await tokens.insertOne({ userId: user._id, token, creationDate });
+            await tokens.insertOne({ UserID: user._id, Token, CreationDate });
             const cookieOptions = { httpOnly: true, secure: false };
             if (rememberMe) {
                 cookieOptions.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
             }
-            res.cookie('authToken', token, cookieOptions);
-            req.session.user = { email: user.email, name: user.name, date: user.date };
+            res.cookie('authToken', Token, cookieOptions);
+            req.session.user = { Email: user.Email, Name: user.Name, DateOfBirth: user.DateOfBirth };
             res.status(200).send("Login successful.");
         } catch (error) {
             console.error("Error logging in user:", error);
@@ -168,18 +171,19 @@ export default function routes(db) {
         }
     });
 
+    //get users info
     app.get('/api/profile', async (req, res) => {
         if (req.session.user) {
             const users = db.collection("Users");
-            const user = await users.findOne({ email: req.session.user.email });
+            const user = await users.findOne({ Email: req.session.user.Email });
 
             if (user) {
                 res.status(200).json({
-                    email: user.email,
-                    name: user.name,
-                    date: user.date,
-                    ispublisher: user.ispublisher,
-                    profilepicture: req.session.user.profilepicture || 'default.jpg'
+                    Email: user.Email,
+                    Name: user.Name,
+                    DateOfBirth: user.DateOfBirth,
+                    IsPublisher: user.IsPublisher,
+                    profilePicture: req.session.user.profilePicture || 'default.jpg'
                 });
             } else {
                 res.status(404).send("User not found");
@@ -189,6 +193,7 @@ export default function routes(db) {
         }
     });
 
+    //load propic
     app.post('/api/profile/picture', upload.single('profilePicture'), (req, res) => {
         if (!req.session.user) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -201,6 +206,7 @@ export default function routes(db) {
         res.status(200).json({ fileName: req.file.filename });
     });
 
+    //delete account
     app.delete('/api/profile', async (req, res) => {
         if (!req.session.user) {
             res.status(401).send("Unauthorized");
@@ -209,7 +215,7 @@ export default function routes(db) {
         const users = db.collection("Users");
 
         try {
-            const deleteResult = await users.deleteOne({ email: req.session.user.email });
+            const deleteResult = await users.deleteOne({ Email: req.session.user.email });
 
             if (deleteResult.deletedCount > 0) {
                 req.session.destroy(err => {

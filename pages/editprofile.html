@@ -6,48 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Spotify</title>
     <link rel="stylesheet" href="style/common.css" />
+    <link rel="stylesheet" href="style/editprofile.css" />
 </head>
 
 <body>
-    <div class="div1">
-        <img id="profilepicture" src="/uploads/default.jpg" alt="Profile Picture" style="cursor: pointer;">
-        <img src="/media/images/logo.png" alt="logo" id="logo"> <br>
-        <div class="content-container">
-            <div class="title-container">
-                <h1 id="titolo1">Edit profile</h1>
+    <div class="fullpage">
+        <div class="div1">
+            <img id="profilepicture" src="/uploads/default.jpg" alt="Profile Picture" style="cursor: pointer;">
+            <img src="/media/images/logo.png" alt="logo" id="logo"> <br>
+            <div class="content-container">
+                <div class="title-container">
+                    <h1 id="titolo1">Edit profile</h1>
+                </div>
+                <div class="data">
+                    <div class="data1">
+                        <p style="color:white;"><b>Email address: </b></p>
+                        <input type="email" id="Email" name="Email" required>
+                    </div>
+                    <div class="data2">
+                        <p style="color:white;"><b>Password: </b></p>
+                        <input type="password" id="Password" name="Password">
+                        <button id="toggle-password">
+                            <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
+                        </button>
+                    </div>
+                    <div class="data3">
+                        <p style="color:white;"><b>Name: </b></p>
+                        <input type="text" id="Name" name="Name" required>
+                    </div>
+                    <div class="data4">
+                        <p style="color:white;"><b>Date of birth: </b></p>
+                        <input type="date" id="DateOfBirth" name="DateOfBirth" required>
+                    </div>
+                    <input type="file" id="fileinput" style="display: none;" accept="image/*">
+                    <div class="publishercheck">
+                        <label class="switch">
+                            <input type="checkbox" id="IsPublisher" name="IsPublisher">
+                            <span class="slider round"></span>
+                        </label>
+                        <p class="publisher-label"><b>Publisher account</b></p>
+                    </div>
+                </div>
             </div>
-            <div class="data">
-                <div class="data1">
-                    <p style="color:white;"><b>Email address: </b></p>
-                    <input type="email" id="Email" name="Email" required>
-                </div>
-                <div class="data2">
-                    <p style="color:white;"><b>Password: </b></p>
-                    <input type="password" id="Password" name="Password">
-                    <button id="toggle-password">
-                        <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
-                    </button>
-                </div>
-                <div class="data3">
-                    <p style="color:white;"><b>Name: </b></p>
-                    <input type="text" id="Name" name="Name" required>
-                </div>
-                <div class="data4">
-                    <p style="color:white;"><b>Date of birth: </b></p>
-                    <input type="date" id="DateOfBirth" name="DateOfBirth" required>
-                </div>
-                <input type="file" id="fileinput" style="display: none;" accept="image/*">
-                <div class="publishercheck">
-                    <label class="switch">
-                        <input type="checkbox" id="IsPublisher" name="IsPublisher">
-                        <span class="slider round"></span>
-                    </label>
-                    <p class="publisher-label"><b>Publisher account</b></p>
-                </div>
-            </div>
+            <button type="button" id="save">Save Changes</button> <br>
+            <button type="button" id="deletebutton">Delete account</button>
         </div>
-        <button type="button" id="save">Save Changes</button> <br>
-        <button type="button" id="deletebutton">Delete account</button>
     </div>
 
     <script>

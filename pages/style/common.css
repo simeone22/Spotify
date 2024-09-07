@@ -4,33 +4,12 @@ body {
     margin: 0;
     padding: 0;
     background: linear-gradient(to bottom, rgb(64, 68, 64), rgb(0, 0, 0));
-    background-size: cover;
-    background-repeat: no-repeat;
+}
+
+.fullpage {
     height: 100vh;
     overflow: hidden;
 }
-
-#profilepicture {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 125px;
-    height: 125px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid white;
-    transition: all 0.3s ease;
-}
-
-#profilepicture:hover {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    z-index: 10;
-}
-
-
 
 .div1 {
     position: relative;
@@ -44,26 +23,6 @@ body {
     margin: 70px auto 0;
     text-align: center;
     overflow: auto;
-}
-
-.publishercheck {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 5px;
-    border-radius: 5px;
-    color: white;
-}
-
-.publisher-label {
-    font-family: "Archivo Black", sans-serif;
-    color: white;
-    font-size: 1rem;
-    margin: 0;
-    margin-top: 15px;
 }
 
 .title-container {

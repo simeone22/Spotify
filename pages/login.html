@@ -10,33 +10,35 @@
 </head>
 
 <body>
-    <div class="div1">
-        <img src="/media/images/logo.png" alt="logo" id="logo"> <br>
-        <div class="title-container">
-            <h1 id="titolo1">Login to Spotify</h1>
-        </div>
-        <hr>
-        <div class="data">
-            <div class="data1">
-                <p style="color:white;"><b>Email address:</b></p>
-                <input type="text" id="Email" name="Email" placeholder="Email address or username">
+    <div class="fullpage">
+        <div class="div1">
+            <img src="/media/images/logo.png" alt="logo" id="logo"> <br>
+            <div class="title-container">
+                <h1 id="titolo1">Login to Spotify</h1>
             </div>
-            <div class="data2">
-                <p style="color:white;"><b>Password:</b></p>
-                <input type="password" id="Password" name="Password" placeholder="Password">
-                <button id="toggle-password">
-                    <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
-                </button>
+            <hr>
+            <div class="data">
+                <div class="data1">
+                    <p style="color:white;"><b>Email address:</b></p>
+                    <input type="text" id="Email" name="Email" placeholder="Email address or username">
+                </div>
+                <div class="data2">
+                    <p style="color:white;"><b>Password:</b></p>
+                    <input type="password" id="Password" name="Password" placeholder="Password">
+                    <button id="toggle-password">
+                        <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
+                    </button>
+                </div>
+                <div class="remember-me-container">
+                    <label class="switch">
+                        <input type="checkbox" id="RememberMe">
+                        <span class="slider round"></span>
+                    </label>
+                    <p><b>⠀Remember me</b></p>
+                </div>
+                <button type="button" id="login"><strong>Login</strong></button> <br>
+                <a href="url">Forgot password?</a>
             </div>
-            <div class="remember-me-container">
-                <label class="switch">
-                    <input type="checkbox" id="RememberMe">
-                    <span class="slider round"></span>
-                </label>
-                <p><b>⠀Remember me</b></p>
-            </div>
-            <button type="button" id="login"><strong>Login</strong></button> <br>
-            <a href="url">Forgot password?</a>
         </div>
 
         <script>

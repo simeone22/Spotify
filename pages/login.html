@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Spotify</title>
+    <link rel="stylesheet" href="style/common.css" />
+    <script src="/js/jquery-3.7.1.slim.min.js"></script>
+</head>
+
+<body>
+    <div class="fullpage">
+        <div class="div1">
+            <img src="/media/images/logo.png" alt="logo" id="logo"> <br>
+            <div class="title-container">
+                <h1 id="titolo1">Login to Spotify</h1>
+            </div>
+            <hr>
+            <div class="data">
+                <div class="data1">
+                    <p style="color:white;"><b>Email address:</b></p>
+                    <input type="text" id="Email" name="Email" placeholder="Email address or username">
+                </div>
+                <div class="data2">
+                    <p style="color:white;"><b>Password:</b></p>
+                    <input type="password" id="Password" name="Password" placeholder="Password">
+                    <button id="toggle-password">
+                        <img src="/media/images/eye1.png" alt="eye" id="eye-icon">
+                    </button>
+                </div>
+                <div class="remember-me-container">
+                    <label class="switch">
+                        <input type="checkbox" id="RememberMe">
+                        <span class="slider round"></span>
+                    </label>
+                    <p><b>⠀Remember me</b></p>
+                </div>
+                <button type="button" id="login"><strong>Login</strong></button> <br>
+                <a href="url">Forgot password?</a>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('toggle-password').addEventListener('click', function () {
+                var x = document.getElementById("Password");
+                var eyeIcon = document.getElementById("eye-icon");
+
+                if (x.type === "password") {
+                    x.type = "text";
+                    eyeIcon.src = '/media/images/eye2.png';
+                } else {
+                    x.type = "password";
+                    eyeIcon.src = '/media/images/eye1.png';
+                }
+            });
+
+            document.getElementById('login').addEventListener('click', async function () {
+                const Email = document.getElementById('Email').value;
+                const Password = document.getElementById('Password').value;
+                const rememberMe = document.getElementById('RememberMe').checked;
+
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ Email, Password })
+                });
+
+                if (response.ok) {
+                    const profileResponse = await fetch('/api/profile');
+                    if (profileResponse.ok) {
+                        const userData = await profileResponse.json();
+                        const resultWindow = window.open('editprofile.html');
+                        resultWindow.document.close();
+                    } else {
+                        alert('Failed to retrieve user data.');
+                    }
+                } else {
+                    const result = await response.text();
+                    alert(result);
+                }
+            });
+        </script>
+</body>
+
+</html>
